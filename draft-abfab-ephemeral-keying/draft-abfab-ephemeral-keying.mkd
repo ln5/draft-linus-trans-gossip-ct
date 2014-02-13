@@ -1,0 +1,149 @@
+---
+title: Ephemeral keying for ABFAB
+docname: draft-abfab-ephemeral-keying-00
+date: 2014-02-13
+category: info
+
+ipr: trust200902
+area: Security
+wg: ABFAB
+kw: Internet-Draft
+
+author:
+  ins: L. Nordberg
+  name: Linus Nordberg
+  email: linus@nordu.net
+  org: NORDUnet
+
+normative:
+  RFC3748:
+  RFC7055:
+  RFC2743:
+
+informative:
+
+--- abstract
+
+This document describes how EAP-GSS provides forward secrecy by
+encrypting each session in an ephemeral key generated in the initial
+state of the context establishment. This Diffie-Hellman key is shared
+by the initiator (EAP peer) and acceptor (EAP authenticator).
+
+The goal is to stop a passive attacker with access to the traffic
+between an ABFAB user and the service she uses (Relying Party), from
+getting access to key material and information linkable to the user or
+from being able to fingerprint the user.
+
+--- middle
+
+Introduction {#problems}
+============
+
+Privacy against passive observers
+---------------------------------
+
+- IDP realm almost always exposed
+[FIXME]
+
+- fingerprint of EAP implementation
+[FIXME]
+
+- certs of IDP realm
+[FIXME]
+
+EAP exposed between the initiator and acceptor
+----------------------------------------------
+
+Access to the MSK gives the possibility to decrypt [and tamper with?]
+the traffic protected by the EAP tunnel, i.e. traffic between
+initiator and acceptor (the ABFAB Client and the RP). AAA proxies
+between RP and IdP have this access and so has anyone eavesdropping on
+the path between RP and IdP in case RADIUS/UDP or Diameter is being
+used instead of RADIUS/TLS.
+
+MIC, channel bindings and extensions subtokens exposed to passive attackers
+---------------------------------------------------------------------------
+
+At the GSS-API layer, the following sensitive data is susceptible for
+eavesdropping by a passive attacker:
+
+- Acceptor name
+
+  Carried in name requests and responses during the initial phase.
+  
+  The acceptor name can be used for fingerprinting users since it
+  indicates what service is requested and supplied. In settings where
+  the endpoints IP addresses and other identifying information don't
+  link the user to the service, exposing the acceptor name is bad for
+  privacy.
+
+- Key material
+
+  Carried in EAP requests and responses in the authenticate phase.
+  
+  [this is where the MSK is derived by the IdP (server) and sent to
+  client (initiator/peer) and RP (acceptor/authenticator)]
+
+- GSS channel bindings, in extensions state
+
+  [FIXME]
+
+- MIC, in extensions state
+
+  [FIXME]
+
+- Flags, in extensions state
+  
+  Currently defined flags leak information about what application
+  protocol is being used and pose a threat to user privacy. Future
+  flags might increase this threat.
+
+- [FIXME: error subtokens]
+
+Solution {#solution}
+========
+
+Generate a Diffie-Hellman key in the initial state of the context
+establishment and use it to encrypt other context tokens. Note that
+the DH key, shared by initiator and acceptor, is unique per GSS-API
+session, not per context token. [Elaborate on why?]
+
+[describe where in initial the DH key exchange happens and how; point
+at general description? copy from existing standard?]
+
+[ describe how we signal algorithm and key size ]
+
+[ describe the use of a nonce/sequence number for temporality, either
+in the key or in the payload, covered by the MIC and verified by the
+other end -- mitigates replay, reflection and reordering attacks ]
+
+[ describe how we derive a symmetric key from the DH key and encrypt
+the context token (perhaps in a GSS "wrap token"?) ]
+
+[ describe how to mix in the DH key with the MSK to form the CRK (7055
+sect 6) -- this will make a MITM kexing with both ends unable to
+create a MIC which validates properly (and a MITM relaying DH kex will
+not know the key and thus not the CRK) ]
+
+Costs {#costs}
+=====
+
+- This will cost FIXME extra roundtrips.
+
+- [No new GSS mech. Thus no complexity cost of picking the right one.]
+
+Open questions
+==============
+
+- Should we make the ephemeral keying and encryption optional?
+
+  Might have to -- asking the list about breaking backward compatibility.
+- Bid down attacks -- detect, prevent
+
+  "Interesting" idea from Sam: 6067 CB implementing 5056 CB could
+  detect MITM before end of extension state (MIC).
+- Include the nonce/sequence number in tokens or fold it into the key?
+
+Security considerations
+=======================
+TBD
