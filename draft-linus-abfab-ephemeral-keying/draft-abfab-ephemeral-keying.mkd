@@ -137,12 +137,22 @@ Open questions
 - Should we make the ephemeral keying and encryption optional?
 
   Might have to -- asking the list about breaking backward compatibility.
+
 - Bid down attacks -- detect, prevent
 
-  "Interesting" idea from Sam: 6067 CB implementing 5056 CB could
+  Fascinating idea from Sam: 6067 CB implementing 5056 CB could
   detect MITM before end of extension state (MIC).
+
 - Include the nonce/sequence number in tokens or fold it into the key?
 
 Security considerations
 =======================
+
 TBD
+
+Contributors
+============
+
+The whole idea of adding ephemeral keys to ABFAB was suggested by Sam
+Hartman. Substantial ideas and discussions on this subject were
+contributed by Sam Hartman and Josh Howlett.
