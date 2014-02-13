@@ -1,6 +1,6 @@
 ---
 title: Ephemeral keying for ABFAB
-docname: draft-abfab-ephemeral-keying-00
+docname: draft-linus-abfab-ephemeral-keying-00
 date: 2014-02-13
 category: info
 
