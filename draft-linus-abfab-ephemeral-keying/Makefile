@@ -1,4 +1,4 @@
-DOC = draft-abfab-ephemeral-keying
+DOC = draft-linus-abfab-ephemeral-keying
 
 ## Change nothing below this line unless you know what you're doing
 
