@@ -22,10 +22,11 @@ author:
     org: JANET(UK)
 
 normative:
-  I-D.ietf-abfab-arch:
-  RFC3748:
-  RFC7055:
   RFC2743:
+  RFC3748:
+  RFC4282:
+  RFC7055:
+  I-D.ietf-abfab-arch:
 
 --- abstract
 
@@ -71,10 +72,11 @@ working from the lowest layers of the protocol stack upwards.
 RADIUS
 ------
 
-The realm component of the NAI [REF] is generally exposed. While the
-username component of the NAI is easily anonymised, the realm (which
-effectively names the user's identity provider (IdP)) will provide a
-strong indication of the organisational affiliation of a user.
+The realm component of the NAI {{RFC4282}} is generally exposed. While
+the username component of the NAI is easily anonymised, the realm
+(which effectively names the user's identity provider (IdP)) will
+provide a strong indication of the organisational affiliation of a
+user.
 
 In the event that RADIUS/UDP is being used instead of RADIUS/TLS,
 intermediate proxies between the acceptor and IdP have access to the
