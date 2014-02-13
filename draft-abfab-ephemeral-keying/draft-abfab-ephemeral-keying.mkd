@@ -16,11 +16,10 @@ author:
   org: NORDUnet
 
 normative:
+  I-D.ietf-abfab-arch:
   RFC3748:
   RFC7055:
   RFC2743:
-
-informative:
 
 --- abstract
 
