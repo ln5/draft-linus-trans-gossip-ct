@@ -10,10 +10,16 @@ wg: ABFAB
 kw: Internet-Draft
 
 author:
-  ins: L. Nordberg
-  name: Linus Nordberg
-  email: linus@nordu.net
-  org: NORDUnet
+  -
+    ins: L. Nordberg
+    name: Linus Nordberg
+    email: linus@nordu.net
+    org: NORDUnet
+  -
+    ins: J. Howlett
+    name: Josh Howlett
+    email: Josh.Howlett@ja.net
+    org: JANET(UK)
 
 normative:
   I-D.ietf-abfab-arch:
@@ -38,66 +44,77 @@ from being able to fingerprint the user.
 Introduction {#problems}
 ============
 
-Privacy against passive observers
----------------------------------
+The ABFAB architecture {{I-D.ietf-abfab-arch}} defines a GSS-API
+mechanism for the Extensible Authentication Protocol {{RFC7055}}. This
+mechanism provides support for the security services offered by the
+GSS-API, including the confidentiality of context tokens. This
+confidentiality service is available once a GSS context has been
+negotiated successfully between the initiator and acceptor.
 
-- IDP realm almost always exposed
-[FIXME]
+However there is a possibility that a passive observer could extract
+information from this negotiation that could potentially compromise
+aspects of the confidentiality of the context tokens and/or the
+privacy of the initiator and/or acceptor.
 
-- fingerprint of EAP implementation
-[FIXME]
+This document defines an extension to {{RFC7055}} to deny a passive
+observer access to this information by encrypting the tokens used to
+establish the GSS context.
 
-- certs of IDP realm
-[FIXME]
 
-EAP exposed between the initiator and acceptor
-----------------------------------------------
+Information potentially accessible to a passive observer {#passive-access}
+========================================================
 
-Access to the MSK gives the possibility to decrypt [and tamper with?]
-the traffic protected by the EAP tunnel, i.e. traffic between
-initiator and acceptor (the ABFAB Client and the RP). AAA proxies
-between RP and IdP have this access and so has anyone eavesdropping on
-the path between RP and IdP in case RADIUS/UDP or Diameter is being
-used instead of RADIUS/TLS.
+This section describes the information available to a passive observer
+of an {{RFC7055}} negotiation between an initiator and acceptor,
+working from the lowest layers of the protocol stack upwards.
 
-MIC, channel bindings and extensions subtokens exposed to passive attackers
----------------------------------------------------------------------------
+RADIUS
+------
 
-At the GSS-API layer, the following sensitive data is susceptible for
-eavesdropping by a passive attacker:
+The realm component of the NAI [REF] is generally exposed. While the
+username component of the NAI is easily anonymised, the realm (which
+effectively names the user's identity provider (IdP)) will provide a
+strong indication of the organisational affiliation of a user.
 
-- Acceptor name
+In the event that RADIUS/UDP is being used instead of RADIUS/TLS,
+intermediate proxies between the acceptor and IdP have access to the
+EAP MSK. Knowledge of the MSK could facilitate the compromise of the
+GSS context, which is derived from this key, potentially allowing
+decryption of the GSS session.
 
-  Carried in name requests and responses during the initial phase.
-  
-  The acceptor name can be used for fingerprinting users since it
-  indicates what service is requested and supplied. In settings where
-  the endpoints IP addresses and other identifying information don't
-  link the user to the service, exposing the acceptor name is bad for
-  privacy.
+EAP method
+----------
 
-- Key material
+The EAP methods most commonly used with {{RFC7055}} use X.509 server
+certificates to authenticate the IdP. This certificate will include
+information identifying the IdP's server.
 
-  Carried in EAP requests and responses in the authenticate phase.
-  
-  [this is where the MSK is derived by the IdP (server) and sent to
-  client (initiator/peer) and RP (acceptor/authenticator)]
+A passive observer may also be able to fingerprint the EAP
+implementation [FIXME].
 
-- GSS channel bindings, in extensions state
 
-  [FIXME]
+GSS-API data
+------------
 
-- MIC, in extensions state
+A variety of information is available at the GSS-API layer.
 
-  [FIXME]
+- The acceptor name is carried in name requests and responses during
+the initial phase. This can be used for fingerprinting users since it
+indicates what service is requested and supplied. In settings where
+the endpoint's IP addresses and other identifying information don't
+link the user to the service, exposing the acceptor name is
+detrimental to privacy.
 
-- Flags, in extensions state
-  
-  Currently defined flags leak information about what application
-  protocol is being used and pose a threat to user privacy. Future
-  flags might increase this threat.
+- GSS channel bindings are also available in the extensions state;
+these bindings typically identify the acceptor to the initiator.
 
-- [FIXME: error subtokens]
+- The currently defined flags leak information about which application
+protocol is being used and pose a threat to user privacy. Future flags
+might increase this threat.
+
+- Finally the mechanism MIC is also exposed and error subtokens are
+also exposed [FIXME].
+
 
 Solution {#solution}
 ========
@@ -123,6 +140,17 @@ the context token (perhaps in a GSS "wrap token"?) ]
 sect 6) -- this will make a MITM kexing with both ends unable to
 create a MIC which validates properly (and a MITM relaying DH kex will
 not know the key and thus not the CRK) ]
+
+Keying algorithm {#keying}
+================
+
+This section defines an algorithm, based on the Diffie-Hellman
+protocol, enabling the initiator and acceptor to negotiate a shared
+key during the initial phase of the GSS context establishment. This
+key is used to encrypt all subsequent context tokens. The key is
+unique per GSS-API session, and is not rotated for each successive
+context token.  [Elaborate on why not?]
+
 
 Costs {#costs}
 =====
