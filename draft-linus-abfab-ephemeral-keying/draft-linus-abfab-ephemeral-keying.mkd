@@ -73,7 +73,7 @@ RADIUS
 ------
 
 The realm component of the NAI {{RFC4282}} is generally exposed. While
-the username component of the NAI is easily anonymised, the realm
+the user name component of the NAI is easily anonymised, the realm
 (which effectively names the user's identity provider (IdP)) will
 provide a strong indication of the organisational affiliation of a
 user.
@@ -93,7 +93,6 @@ information identifying the IdP's server.
 
 A passive observer may also be able to fingerprint the EAP
 implementation [FIXME].
-
 
 GSS-API data
 ------------
@@ -157,9 +156,10 @@ context token.  [Elaborate on why not?]
 Costs {#costs}
 =====
 
-- This will cost FIXME extra roundtrips.
+- This will cost FIXME extra round trips.
 
 - [No new GSS mech. Thus no complexity cost of picking the right one.]
+
 
 Open questions
 ==============
@@ -175,10 +175,12 @@ Open questions
 
 - Include the nonce/sequence number in tokens or fold it into the key?
 
+
 Security considerations
 =======================
 
 TBD
+
 
 Contributors
 ============
