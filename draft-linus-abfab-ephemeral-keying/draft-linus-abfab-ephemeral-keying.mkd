@@ -3,7 +3,7 @@ title: Ephemeral keying for ABFAB
 docname: draft-linus-abfab-ephemeral-keying-00
 date: 2014-02-13
 category: info
-
+pi: [toc, sortrefs, symrefs]
 ipr: trust200902
 area: Security
 wg: ABFAB
