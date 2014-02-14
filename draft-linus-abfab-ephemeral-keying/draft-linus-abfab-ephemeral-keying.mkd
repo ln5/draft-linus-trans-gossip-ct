@@ -142,6 +142,27 @@ sect 6) -- this will make a MITM kexing with both ends unable to
 create a MIC which validates properly (and a MITM relaying DH kex will
 not know the key and thus not the CRK) ]
 
+Why do this at the GSS-EAP layer {#why-in-gss-eap}
+--------------------------------
+
+Using a short lived key for providing confidentiality between an ABFAB
+client and the IdP could arguably be done at the EAP layer rather than
+at the GSS-API layer. A general solution for EAP would give better
+protocol reuse.
+
+EAP methods run between the EAP peer and server. A Diffie-Hellman key
+exchange between these endpoints can not start with the first message
+sent from the client since the client doesn't talk to the EAP server
+(the IdP) directly and can not be helped with doing that until the EAP
+authenticator knows where the IdP is to be found. Most of the
+mentioned leaks at the GSS-API layer would thus still be present in
+this solution.
+
+[ maybe expand on how TEAP [draft-ietf-emu-eap-tunnel-method] could
+solve the problem of AAA proxies learning the MSK, impersonating the
+RP ]
+
+
 Keying algorithm {#keying}
 ================
 
