@@ -78,11 +78,12 @@ the user name component of the NAI is easily anonymised, the realm
 provide a strong indication of the organisational affiliation of a
 user.
 
-In the event that RADIUS/UDP is being used instead of RADIUS/TLS,
-intermediate proxies between the acceptor and IdP have access to the
-EAP MSK. Knowledge of the MSK could facilitate the compromise of the
-GSS context, which is derived from this key, potentially allowing
-decryption of the GSS session.
+In the event that RADIUS/UDP is being used instead of RADIUS/TLS, not
+only do the intermediate proxies between the acceptor and the IdP have
+access to the EAP MSK but a passive observer does too. Knowledge of
+the MSK could facilitate the compromise of the GSS context, which is
+derived from this key, potentially allowing decryption of the GSS
+session.
 
 EAP method
 ----------
