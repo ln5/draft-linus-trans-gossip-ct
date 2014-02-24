@@ -66,8 +66,8 @@ Information potentially accessible to a passive observer {#passive-access}
 ========================================================
 
 This section describes the information available to a passive observer
-of an {{RFC7055}} negotiation between an initiator and acceptor,
-working from the lowest layers of the protocol stack upwards.
+of an {{I-D.ietf-abfab-arch}} authentication, working from the lowest
+layers of the protocol stack upwards.
 
 RADIUS
 ------
