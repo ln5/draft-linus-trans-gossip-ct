@@ -1,7 +1,7 @@
 ---
 title: Ephemeral keying for ABFAB
-docname: draft-linus-abfab-ephemeral-keying-00
-date: 2014-02-13
+docname: draft-linus-abfab-ephemeral-keying-01
+date: 2014-02-25
 category: info
 pi: [toc, sortrefs, symrefs]
 ipr: trust200902
@@ -25,6 +25,7 @@ normative:
   RFC2743:
   RFC3748:
   RFC4282:
+  RFC5077:
   RFC7055:
   I-D.ietf-abfab-arch:
 
@@ -95,6 +96,10 @@ information identifying the IdP's server.
 A passive observer may also be able to fingerprint the EAP
 implementation [FIXME].
 
+In cases where a TLS-based EAP method is used, a passive observer may
+be able to fingerprint the client based on TLS session resumption, for
+example as described in {{RFC5077}} section 5.8.
+
 GSS-API data
 ------------
 
@@ -164,6 +169,10 @@ solve the problem of AAA proxies learning the MSK, impersonating the
 RP ]
 
 
+[ There probably needs to be a nod to using an application level tunnel as
+  well.  While I think that it might be nice to have this in the GSS-EAP
+  layer, we cannot ignore this as an option. -JS ]
+
 Keying algorithm {#keying}
 ================
 
@@ -216,3 +225,6 @@ Contributors
 The whole idea of adding ephemeral keys to ABFAB was suggested by Sam
 Hartman who also contributed substantial ideas and discussions on this
 subject.
+
+Jim Schaad has made several valuable comments with corrections and
+suggestions.
