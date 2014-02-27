@@ -168,10 +168,12 @@ this solution.
 solve the problem of AAA proxies learning the MSK, impersonating the
 RP ]
 
-
-[ There probably needs to be a nod to using an application level tunnel as
-  well.  While I think that it might be nice to have this in the GSS-EAP
-  layer, we cannot ignore this as an option. -JS ]
+An alternative place to protect ABFAB authentication with a short
+lived key would be in the application level protocol. While some
+applications are using protocols already able to protect the GSS-API
+traffic using a TLS session with an ephemeral key (XMPP, IMAP, SMTP)
+it's not mandatory to use such a tunnel. Other applications use
+protocols which might be hard to protect in a tunnel (NFS, SSH).
 
 Keying algorithm {#keying}
 ================
