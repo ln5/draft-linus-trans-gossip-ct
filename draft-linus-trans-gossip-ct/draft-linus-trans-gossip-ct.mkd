@@ -31,7 +31,7 @@ normative:
 
 --- abstract
 
-[5-10 lines, max 20]
+\[5-10 lines, max 20\]
 
 --- middle
 
@@ -69,8 +69,11 @@ What to gossip {#what}
 ==============
 
 What kind of data?
+
 - send some STH's to web servers
-  [include consistency proofs too?]
+
+  \[include consistency proofs too?\]
+
 - send invalid SCT's to _originating_ web server
 
 Which STH's and how much of them is part of gossiping strategy and out
@@ -79,7 +82,7 @@ of scope for this document.
 How to gossip {#how}
 =============
 
-[this section is the meat of this draft]
+\[this section is the meat of this draft\]
 
 Message format and processing
 -----------------------------
