@@ -1,0 +1,117 @@
+---
+title: Gossiping in CT
+docname: draft-linus-trans-gossip-ct-00
+date: 2014-10-25
+category: exp
+pi: [toc, sortrefs, symrefs]
+ipr: trust200902
+area: Security
+wg: TRANS
+kw: Internet-Draft
+
+author:
+  -
+    ins: L. Nordberg
+    name: Linus Nordberg
+    email: linus@nordu.net
+    org: NORDUnet
+  -
+    ins: N. N
+    name: Your Name Here
+    email: n @ domain
+    org: org
+  -
+    ins: N. N
+    name: Your Name Here
+    email: n @ domain
+    org: org
+
+normative:
+  RFC6962:
+
+--- abstract
+
+[5-10 lines, max 20]
+
+--- middle
+
+Introduction {#intro}
+=========
+
+- separation between gossip protocol and strategy for gossiping
+- defining the scope
+  - gossiping has three pieces
+    - strategy
+    - gossip
+    - gossip-ct
+  - scope for this document is gossip-ct
+
+How to act on gossip is part of gossiping strategy and out of scope
+for this document.
+
+Problem {#problem}
+=======
+
+Gossiping can help to solve two separate problems:
+
+- detection of malicious logs showing different views to different
+  clients, aka the partitioning attack
+
+- how to spread information about illegitimate certificates and SCT's
+
+Who should gossip {#who}
+=================
+
+- TLS clients using PKIX (i.e. web browsers, MTA:s, MUA:s, XMPP clients)
+- CT auditors and CT monitors
+
+What to gossip {#what}
+==============
+
+What kind of data?
+- send some STH's to web servers
+  [include consistency proofs too?]
+- send invalid SCT's to _originating_ web server
+
+Which STH's and how much of them is part of gossiping strategy and out
+of scope for this document.
+
+How to gossip {#how}
+=============
+
+[this section is the meat of this draft]
+
+Message format and processing
+-----------------------------
+
+- message description
+- validation of received message
+
+Transport
+---------
+
+- http headers in tls connections to web servers
+
+Open questions
+==============
+
+- active vs. passive participants
+
+Security and privacy considerations
+===================================
+
+- why STH's are ok
+- why SCT's generally are bad for privacy
+- protection against bad actors
+  - flooding attack
+- gossiping being blocked
+
+IANA considerations
+===================
+
+TBD
+
+Contributors
+============
+
+TBD
