@@ -1,9 +1,9 @@
 Gossiping in Certificate Transparency
 =====================================
 
-[RFC 6962](http://tools.ietf.org/html/rfc6962) describes CT but
-leaves out information about gossiping. This is an IETF Internet-Draft
-about gossiping in CT.
+[RFC 6962](http://tools.ietf.org/html/rfc6962) describes CT but leaves
+out information about gossiping. This is an IETF Internet-Draft about
+gossiping in CT.
 
 
 Relevant mailing lists
