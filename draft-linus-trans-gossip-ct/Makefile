@@ -2,14 +2,14 @@ DOC = draft-linus-trans-gossip-ct
 
 # Not much user servicable parts below this line.
 
-VER=$(shell grep ^docname: $(DOC).mkd | awk -F- '{print $$NF}')
+VER=$(shell grep ^docname: $(DOC).md | awk -F- '{print $$NF}')
 TEXT=$(DOC)-$(VER).txt
 HTML=$(DOC)-$(VER).html
 XML=$(DOC).xml
 
 all: $(TEXT) $(HTML) 
 
-$(XML): $(DOC).mkd
+$(XML): $(DOC).md
 	kramdown-rfc2629 $< > $@
 
 $(TEXT): $(XML)
