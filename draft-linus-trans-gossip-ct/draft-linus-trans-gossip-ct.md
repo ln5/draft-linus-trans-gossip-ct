@@ -1,7 +1,7 @@
 ---
 title: Gossiping in CT
 docname: draft-linus-trans-gossip-ct-00
-date: 2014-10-25
+date: 2014-10-26
 category: exp
 pi: [toc, sortrefs, symrefs]
 ipr: trust200902
