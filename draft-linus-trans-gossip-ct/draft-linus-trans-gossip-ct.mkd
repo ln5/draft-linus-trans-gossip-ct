@@ -35,86 +35,84 @@ normative:
 
 --- middle
 
-Introduction {#intro}
-=========
+# Introduction
 
 - separation between gossip protocol and strategy for gossiping
-- defining the scope
-  - gossiping has three pieces
-    - strategy
-    - gossip
-    - gossip-ct
+- defining the scope -- gossiping in CT has three pieces
+    - general gossip protocol [draft-linus-trans-gossip]
+    - gossip-ct -- what type of data and with whom to gossip
+    - strategy/policy -- what data to gossip about and how to deal
+      with incoming gossip
   - scope for this document is gossip-ct
 
-How to act on gossip is part of gossiping strategy and out of scope
-for this document.
+# Problem
 
-Problem {#problem}
-=======
-
-Gossiping can help to solve two separate problems:
+Gossiping in CT can help with solving two separate problems:
 
 - detection of malicious logs showing different views to different
   clients, aka the partitioning attack
 
-- how to spread information about illegitimate certificates and SCT's
+- how to spread information about illegitimate certificates, SCT's,
+  STH's and proofs
 
-Who should gossip {#who}
-=================
+# Who should gossip {#who}
 
 - TLS clients using PKIX (i.e. web browsers, MTA:s, MUA:s, XMPP clients)
 - CT auditors and CT monitors
 
-What to gossip {#what}
-==============
+# What to gossip {#what}
 
-What kind of data?
+What kind of data should be gossiped about?
 
-- send some STH's to web servers
+## Signed Tree Heads {#STH}
 
-  \[include consistency proofs too?\]
+CT clients SHOULD send STH's to all servers willing to convey gossip.
+
+Which STH's to send and how often is part of gossiping strategy and
+out of scope for this document.
+
+\[FIXME include consistency proofs too?\]
+
+### Web browsers
+
+Web browsers SHOULD send STH's to web servers they connect to.
+
+Which web servers to send STH's to is determined by the web servers
+capability and willingness to convey gossip. This is indicated by http
+header \[FIXME\].
+
+### CT monitors
+SHOULD xxx
+
+### MTA:s
+SHOULD xxx
+
+### MUA:s
+SHOULD xxx
+
+### XMPP clients
+SHOULD xxx
+
+## Invalid Signed Certificate Timestamps
 
 - send invalid SCT's to _originating_ web server
 
-Which STH's and how much of them is part of gossiping strategy and out
-of scope for this document.
+# How to gossip {#how}
 
-How to gossip {#how}
-=============
+- pointer to [draft-linus-trans-gossip]
 
-\[this section is the meat of this draft\]
-
-Message format and processing
------------------------------
-
-- message description
-- validation of received message
-
-Transport
----------
-
-- http headers in tls connections to web servers
-
-Open questions
-==============
+# Open questions
 
 - active vs. passive participants
 
-Security and privacy considerations
-===================================
+# Security and privacy considerations
 
 - why STH's are ok
 - why SCT's generally are bad for privacy
-- protection against bad actors
-  - flooding attack
-- gossiping being blocked
+- pointer to [draft-linus-trans-gossip]
 
-IANA considerations
-===================
-
+# IANA considerations
 TBD
 
-Contributors
-============
-
+# Contributors
 TBD
