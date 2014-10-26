@@ -53,19 +53,55 @@ normative:
 
 # Problem
 
-Gossiping can help to solve two separate problems:
+Gossiping can help solving two separate problems:
 
-- detection of malicious logs showing different views to different
-  clients, aka the partitioning attack
+First, detection of malicious logs showing different views to
+different clients, a.k.a. the partitioning attack.
 
-- how to spread information about illegitimate log entry content, like
-  certificates in the CT case
+Second, how to spread information about illegitimate log entry content
+or other log data. In CT this would be X.509 certificates, SCT's,
+STH's and proofs.
 
-# Message format and processing {#message}
+# Informal description of the proposed gossiping system
 
-- message description
+This section describes how a gossiping system could be implemented for
+CT.
 
-- validation of received message
+        web-browser   ct-monitor              <-- gossip client
+               \       /
+            gossip-daemon
+               /       \
+     socket-tansport   http-transport         <-- gossip transport
+             |            |
+       web-browser[0]   tls-lib
+
+The daemon listens to two separate sockets, one for clients and one
+for transports.
+
+Clients (top row) connect to the daemon client socket and send and
+receive gossip messages. A message contains one or more transport ids
+and gossip data. The transport ids in outgoing messages are used to
+select which transport(s) the gossip data is allowed to be sent
+over. Transport ids in incoming messages reflect which transport they
+were received over.
+
+Transports are either built into the daemon or registered with the
+daemon by connecting to the daemon transport socket and identifying
+itself with a string (the transport id). This registering process will
+require authentication.
+
+(A less complex alternative to such a registering scheme would be to
+have built-in transports only, one of which is "echo". Adding a tag
+(think IMAP) to messages would make it possible for clients to match
+sent and received messages, making an echo transport useful for
+programs like web browsers which already have the transport ready for
+use.)
+
+# Message format and processing
+
+## Message description {#message}
+
+## Validation of received messages {#validation}
 
 # Transports
 
@@ -74,12 +110,15 @@ Gossiping can help to solve two separate problems:
 # Open questions
 
 # Security and privacy considerations
+
 - protection against bad actors
   - flooding attack
 - gossiping being blocked
 
 # IANA considerations
+
 TBD
 
 # Contributors
+
 TBD
