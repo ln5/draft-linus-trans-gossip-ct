@@ -51,6 +51,11 @@ normative:
       - how to act on gossip (strategy/policy)
   - scope for this document is general gossip protocol
 
+- terminology
+  - gossip peer
+  - gossip service
+  - gossip transport
+
 # Problem
 
 Gossiping can help solving two separate problems:
@@ -62,14 +67,55 @@ Second, how to spread information about illegitimate log entry content
 or other log data. In CT this would be X.509 certificates, SCT's,
 STH's and proofs.
 
-# Informal description of the proposed gossiping system
+# Message format and processing
+
+## Message description {#message}
+
+### gossip-msg
+
+- protocol-version = v0
+
+v0 = 0
+
+- timestamp = 64bit integer
+
+time of arrival to gossip service, milliseconds since the epoch
+
+- direction = "outgoing" \| "incoming"
+
+- destination = transports \| "all" \| ""
+
+transports = transport [transports]
+
+"all" means that the message should be sent to all registered
+transports
+
+an incoming message has destination = ""
+
+- source = transport \| ""
+
+an outgoing message has source = ""
+
+- transport = a string containing the name of a registered transport
+
+- log-id = a transparency log id
+
+- datum = opaque blob containing the payload of the message
+
+## Validation of received messages {#validation}
+
+# Transports
+
+# Open questions
+
+# Examples
 
 This section describes how a gossiping system could be implemented for
 CT.
 
-        web-browser   ct-monitor              <-- gossip client
+        web-browser   ct-monitor              <-- gossip peer
                \       /
-            gossip-daemon
+            gossip-daemon                     <-- gossip service
                /       \
      socket-tansport   http-transport         <-- gossip transport
              |            |
@@ -96,18 +142,6 @@ have built-in transports only, one of which is "echo". Adding a tag
 sent and received messages, making an echo transport useful for
 programs like web browsers which already have the transport ready for
 use.)
-
-# Message format and processing
-
-## Message description {#message}
-
-## Validation of received messages {#validation}
-
-# Transports
-
-
-
-# Open questions
 
 # Security and privacy considerations
 
