@@ -36,6 +36,11 @@ normative:
 
 # Introduction
 
+This document describes a gossip service. Gossip peers connect to it
+and start sending and receiving gossip messages. Gossip transports
+register with it and transfer messages to other gossip services and
+peers.
+
 - separation between general gossip protocol and specifics for
   different transparency systems
 
@@ -87,6 +92,8 @@ time of arrival to gossip service, milliseconds since the epoch
 
 transports = transport [transports]
 
+which transports to send an outgoing message over
+
 "all" means that the message should be sent to all registered
 transports
 
@@ -94,11 +101,15 @@ an incoming message has destination = ""
 
 - source = transport \| ""
 
+an incoming message has source set to the transport it came in over
+
 an outgoing message has source = ""
 
 - transport = a string containing the name of a registered transport
 
-- log-id = a transparency log id
+- log-id = SHA-256 hash of a log's public key, 32 octets
+
+the log id of the transparency log gossiped about
 
 - datum = opaque blob containing the payload of the message
 
@@ -107,6 +118,8 @@ an outgoing message has source = ""
 # Transports
 
 # Open questions
+
+- replace strings in the protocol with registered values
 
 # Examples
 
@@ -121,10 +134,10 @@ CT.
              |            |
        web-browser[0]   tls-lib
 
-The daemon listens to two separate sockets, one for clients and one
+The daemon listens to two separate sockets, one for peers and one
 for transports.
 
-Clients (top row) connect to the daemon client socket and send and
+Peers (top row) connect to the daemon client socket and send and
 receive gossip messages. A message contains one or more transport ids
 and gossip data. The transport ids in outgoing messages are used to
 select which transport(s) the gossip data is allowed to be sent
@@ -138,7 +151,7 @@ require authentication.
 
 (A less complex alternative to such a registering scheme would be to
 have built-in transports only, one of which is "echo". Adding a tag
-(think IMAP) to messages would make it possible for clients to match
+(think IMAP) to messages would make it possible for peers to match
 sent and received messages, making an echo transport useful for
 programs like web browsers which already have the transport ready for
 use.)
