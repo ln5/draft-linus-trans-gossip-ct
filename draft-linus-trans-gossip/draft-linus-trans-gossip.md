@@ -181,7 +181,7 @@ connected peers.
 
 An outgoing message is sent by a peer and received by a transport.
 
-An incomgin message is sent by a transport and received by one or more
+An incoming message is sent by a transport and received by one or more
 peers.
 
 Example of an outgoing message, i.e. sent from a peer and received by
@@ -208,7 +208,7 @@ received by one or more peers:
 
 - command = "gossip-msg-0"
 
-- timestamp = 64bit integer
+- timestamp = 64bit integer in decimal
 
 NTP time when the message was received by the gossip service,
 in milliseconds since the epoch
@@ -242,10 +242,11 @@ transports
 
 the log id of the transparency log gossiped about
 
-- gossip-data = opaque string, base64 encoded
+- gossip-data = opaque string, base64 encoded ({{!RFC4648}})
 
-gossip-data contains the payload of the message. Its contents depend
-on what kind of data is being gossiped.
+gossip-data contains the payload of the message. Its exact contents
+depend on what kind of data is being gossiped but MUST include a
+signature made by the log indicated by the log-id in the same message.
 
 # Examples
 

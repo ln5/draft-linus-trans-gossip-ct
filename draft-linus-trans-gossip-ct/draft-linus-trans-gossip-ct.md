@@ -28,6 +28,10 @@ author:
 
 normative:
   RFC6962:
+  draft-linus-trans-gossip:
+    title: Transparency Gossip
+  draft-linus-trans-gossip-transport-https:
+    title: Transparency Gossip HTTPS transport
 
 --- abstract
 
@@ -41,7 +45,7 @@ This document describes gossiping in Certificate Transparency.
 
 - separation between gossip protocol and strategy for gossiping
 - defining the scope -- gossiping in CT has three pieces
-    - general gossip protocol [draft-linus-trans-gossip]
+    - general gossip protocol {{draft-linus-trans-gossip}}
     - gossip-ct -- what type of data and with whom to gossip (this draft)
     - strategy/policy -- what data to gossip about and how to deal
       with incoming gossip
@@ -69,8 +73,8 @@ This section describes what log data to gossip.
 
 ## Signed Tree Heads {#STH}
 
-CT clients SHOULD gossip about Signed Tree Heads (STH's) with as many
-other CT clients as possible.
+All CT clients SHOULD gossip about Signed Tree Heads (STH's) with as
+many other CT clients as possible.
 
 Gossiping about STH's enables detection of logs presenting more than
 one view of the log.
@@ -95,48 +99,54 @@ out of scope for this document.
 
 ### Web browsers
 
-Web browsers SHOULD send STH's to web servers they connect to using
-Transparency Gossiping [draft-linus-trans-gossip] transport
-[draft-linus-trans-gossip-transport-https].
+Web browsers SHOULD send STH's to web servers using Transparency
+Gossiping {{draft-linus-trans-gossip}} by sending GOSSIP-MSG messages
+to a gossip service. Web browsers SHOULD use the
+{{draft-linus-trans-gossip-transport-https}} transport and MAY use
+other transports as well.
 
-Which web servers to send STH's to is determined by the web servers
-capability and willingness to convey gossip. This is handled by the
-gossip transport.
+Which web servers to send STH's to is determined by which web servers
+are connected to by the transport and those web servers capability and
+willingness to convey gossip. This is handled by the gossip transport.
+
+Web browsers MAY register as a gosisp transports themselves and
+perform the sending and receiving of gossip mesages.
 
 ### CT monitors
-TBD
+
+CT monitors SHOULD send STH's to web servers using Transparency
+Gossiping {{draft-linus-trans-gossip}} by sending GOSSIP-MSG messages
+to a gossip service.
+
+CT monitors SHOULD use as many transports as possible.
 
 ### MTA:s
+
 TBD
 
 ### MUA:s
+
 TBD
 
 ### XMPP clients
+
 TBD
 
 ## Invalid Signed Certificate Timestamps
 
 TLS clients MAY send illegitimate Signed Certficate Timestamps (SCT's)
-and X.509 certificates to the server it got it/them from. The
-[draft-linus-trans-gossip] messaging format SHOULD be used. The
-[draft-linus-trans-gossip] gossip service MAY be used if there is no
-risk that the SCT is sent to any other party than the originating
-server.
-
-# How to gossip {#how}
-
-- pointer to [draft-linus-trans-gossip]
-
-# Open questions
-
-- active vs. passive participants
+with corresponding X.509 certificate to the server it got the SCT
+from. The {{draft-linus-trans-gossip-transport-https}} messaging
+format SHOULD be used for this.
 
 # Security and privacy considerations
 
-- why STH's are ok
-- why SCT's are bad for privacy in the general case
-- pointer to [draft-linus-trans-gossip]
+- TODO why STH's are ok
+- TODO why SCT's are bad for privacy in the general case
+
+# Open questions
+
+- TODO active vs. passive participants
 
 # IANA considerations
 TBD
