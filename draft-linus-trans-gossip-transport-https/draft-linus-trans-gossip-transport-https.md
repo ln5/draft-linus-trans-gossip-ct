@@ -70,7 +70,7 @@ An HTTPS transport
 
 # Message format and processing {#message}
 
-Messages are ASCII strings on the following form:
+Messages are strings of US-ASCII data on the following form:
 
     <protocol-version>:<log-id>:<gossip-data>
 
@@ -78,14 +78,14 @@ Messages are ASCII strings on the following form:
 decimal. This version is 0.
 
 'log-id' and 'gossip-data' are as defined in the GOSSIP-MSG of
-{{draft-linus-trans-gossip}}. Note that 'gossip-data' is Base64
-encoded.
+{{draft-linus-trans-gossip}}. Note that 'gossip-data' is
+base64-encoded.
+
+Messages MUST be processed according to {{draft-linus-trans-gossip}}.
+
+\[FIXME are there any http specific processing rules to be added?\]
 
 # Security and privacy considerations
-
-TBD
-
-# Open questions
 
 TBD
 

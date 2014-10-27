@@ -10,21 +10,10 @@ wg: TRANS
 kw: Internet-Draft
 
 author:
-  -
-    ins: L. Nordberg
-    name: Linus Nordberg
-    email: linus@nordu.net
-    org: NORDUnet
-  -
-    ins: N. N
-    name: Your Name Here
-    email: n @ domain
-    org: org
-  -
-    ins: N. N
-    name: Your Name Here
-    email: n @ domain
-    org: org
+  ins: L. Nordberg
+  name: Linus Nordberg
+  email: linus@nordu.net
+  org: NORDUnet
 
 normative:
   RFC6962:
@@ -35,31 +24,39 @@ normative:
 
 --- abstract
 
-This document describes gossiping in Certificate Transparency.
-
-\[FIXME: more -- 5-10 lines, max 20\]
+This document describes gossiping in Certificate Transparency
+{{!RFC6962}}.
 
 --- middle
 
 # Introduction
 
-- separation between gossip protocol and strategy for gossiping
-- defining the scope -- gossiping in CT has three pieces
-    - general gossip protocol {{draft-linus-trans-gossip}}
-    - gossip-ct -- what type of data and with whom to gossip (this draft)
-    - strategy/policy -- what data to gossip about and how to deal
-      with incoming gossip
-  - scope for this document is gossip-ct
+Gossiping in Certificate Transparency (CT) can be split up in three
+pieces:
+
+- A general gossip protocol. This document uses
+  {{draft-linus-trans-gossip}} for a general gossip protocol.
+
+- Gossip strategy and policy -- what data to gossip and how to deal
+  with incoming gossip information.
+
+- Gossiping rules, i.e. what type of data and with whom to gossip.
+
+The scope for this document is the last point, the gossiping rules.
 
 # Problem
 
-Gossiping can help CT solving two separate problems.
+Gossiping about what's known about CT logs helps solving the problem
+of detecting malicious logs showing different views to different
+clients, a.k.a. the partitioning attack.
 
-1. Detection of malicious logs showing different views to different
-   clients, a.k.a. the partitioning attack.
-
-2. Dissemination of information about illegitimate STH's and SCT's
-   (and corresponding X.509) \[FIXME: define illegitimate\]
+The separate problem of how to disseminate information about a log
+misbehaving in other ways may be helped by gossiping but poses a
+potential threat to the privacy of end users. Gossiping about log data
+linkable to a specific log entry and through that to a specific site
+has to be constrained to using the gossiping message format and
+gossiping transports for sending sensitive data only to particular
+recipients.
 
 # Who should gossip {#who}
 
@@ -67,9 +64,9 @@ Gossiping can help CT solving two separate problems.
   clients)
 - CT auditors and CT monitors
 
-# What to gossip {#what}
+# What kind of data to gossip about {#what}
 
-This section describes what log data to gossip.
+This section describes what type of log data to gossip.
 
 ## Signed Tree Heads {#STH}
 
@@ -95,7 +92,13 @@ client:
 Which STH's to send and how often is part of gossiping strategy and
 out of scope for this document.
 
-\[FIXME include consistency proofs too?\]
+\[TBD gossip about inclusion proofs and consistency proofs too?\]
+
+STH's are sent to a preconfigured gossip service in a
+{{draft-linus-trans-gossip}} GOSSIP-MSG message with 'gossip-data' as
+a JSON object {{!RFC4627}} with the following content:
+
+- sths: array of {{!RFC6962}} Signed Tree Head's
 
 ### Web browsers
 
@@ -105,12 +108,14 @@ to a gossip service. Web browsers SHOULD use the
 {{draft-linus-trans-gossip-transport-https}} transport and MAY use
 other transports as well.
 
-Which web servers to send STH's to is determined by which web servers
-are connected to by the transport and those web servers capability and
-willingness to convey gossip. This is handled by the gossip transport.
+Which web servers STH's will be sent to depends on which web servers
+the chosen transports are connected to and those web servers
+capability and willingness to convey gossip. This is handled by the
+gossip transports.
 
-Web browsers MAY register as a gosisp transports themselves and
-perform the sending and receiving of gossip mesages.
+Web browsers MAY register as a gossip transport themselves and perform
+the sending and receiving of gossip messages using connections already
+in use.
 
 ### CT monitors
 
@@ -132,24 +137,48 @@ TBD
 
 TBD
 
-## Invalid Signed Certificate Timestamps
+## Illegitimate Signed Certificate Timestamps
 
-TLS clients MAY send illegitimate Signed Certficate Timestamps (SCT's)
-with corresponding X.509 certificate to the server it got the SCT
-from. The {{draft-linus-trans-gossip-transport-https}} messaging
-format SHOULD be used for this.
+If a TLS client detects misbehaviour of a log related to a given
+Signed Certificate Timestamp (SCT) it MAY send that SCT to the web
+server it got the SCT from. A corresponding X.509 certificate chain
+MAY be sent along with the SCT. The
+{{draft-linus-trans-gossip-transport-https}} messaging format SHOULD
+be used for this.
+
+SCT's and corresponding X.509 certificates are sent to a preconfigured
+gossip service in a {{draft-linus-trans-gossip}} GOSSIP-MSG message
+with 'gossip-data' as a JSON object {{!RFC4627}} with the following
+content:
+
+- entry: An array of objects consisting of
+
+  - sct: An {{!RFC6962}} Signed Certificate Timestamp
+
+  - x509_chain: An array of base64-encoded X.509 certificates. The
+    first element is the end-entity certificate, the second chains to
+    the first and so on.
+
+The 'x509_chain' element can be empty or include as many certificates
+part of the same chain as available.
+
+Note that 'gossip-data' is base64-encoded.
 
 # Security and privacy considerations
 
-- TODO why STH's are ok
-- TODO why SCT's are bad for privacy in the general case
+- TODO expand on why gossiping STH's is ok
+
+- TODO expand on why gossiping SCT's is bad for privacy in the general
+  case
 
 # Open questions
 
 - TODO active vs. passive participants
 
 # IANA considerations
+
 TBD
 
 # Contributors
+
 TBD

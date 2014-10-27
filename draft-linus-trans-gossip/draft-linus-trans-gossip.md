@@ -10,21 +10,10 @@ wg: TRANS
 kw: Internet-Draft
 
 author:
-  -
-    ins: L. Nordberg
-    name: Linus Nordberg
-    email: linus@nordu.net
-    org: NORDUnet
-  -
-    ins: N. N
-    name: Your Name Here
-    email: n @ domain
-    org: org
-  -
-    ins: N. N
-    name: Your Name Here
-    email: n @ domain
-    org: org
+  ins: L. Nordberg
+  name: Linus Nordberg
+  email: linus@nordu.net
+  org: NORDUnet
 
 normative:
 
@@ -42,25 +31,34 @@ peers.
 
 # Introduction
 
-- separation between general gossip protocol and specifics for
-  different transparency systems
+Regarding scope, gossiping in any Transparency system, such as
+Certificate Transparency {{?RFC6962}}, can be divided in two distinct
+pieces; a general gossip protocol and the specifics for the
+Transparency system at hand.
 
-- defining the scope -- gossiping in any *T has two distinct pieces
-    - general gossip protocol
-      - message format
-      - validation
-      - transport
-    - gossip for any specific *T system
-      - which types of data
-      - with whom
-      - what data (strategy/policy)
-      - how to act on gossip (strategy/policy)
-  - scope for this document is general gossip protocol
+A general gossip protocol defines a message format, validation rules
+for messages and a mechanism for plugging in different transport
+protocols.
 
-- terminology
-  - gossip peer
-  - gossip service
-  - gossip transport
+The specifics for a Transparency system include which types of data to
+gossip about, with whom to gossip, what particular log data to gossip
+about and how to act on gossip. The last two, what particular data
+objects to send and how to deal with data objects received fall into
+the category of strategy or policy and should probably not be
+standardised.
+
+The scope for this document is a general gossip protocol.
+
+Terminology used in this document:
+
+peer -- Actors gossiping about log data. They are the endpoints in a
+global gossiping system, deciding what to send and how to treat gossip
+from other peers.
+
+transport -- Network programs connecting the local gossiping system to
+other gossiping systems on the internet.
+
+gossip service -- A server connecting local peers and transports.
 
 # Problem
 
@@ -83,12 +81,23 @@ be useful for this task though.
 
 # Overview
 
-TBD
+This document defines a gossip service and a gossip message format
+used by peers and transports to exchange data about logs over the
+internet.
+
+Separating the gossiping actors, called peers, from the actual sending
+and receiving of gossip messages makes it possible to make various
+transport mechanisms available without having to add knowledge about
+transport protocols to peers.
+
+The gossip service connects peers to one or more transports
+responsible for communicating with other gossip services with the help
+of specific internet protocols such as HTTP.
 
 # Transports
 
 A gossip transport is responsible for sending and receiving gossip
-messages over a specific protocol, like HTTPS or XMPP.
+messages over a specific protocol, like HTTP or XMPP.
 
 The way a transport uses its external protocol to convey gossip
 messages is specified by the transport itself and out of scope for
@@ -116,22 +125,25 @@ The message format is described in {{GOSSIP-MSG}}.
 
 ## Validation of received messages {#validation}
 
-Peers MUST validate all gossip messages, incoming and outoing, by
+Peers MUST validate all gossip messages, incoming and outgoing, by
 verifying GOSSIP-MSG 'gossip-data' according to the rules of the log
 indicated by 'log-id'. Messages with an unknown log id or which
 signature don't check out correctly MUST be silently discarded.
 
-Transports MAY validate gossip messages before relaying them.
+Transports MAY validate gossip messages before forwarding them.
 
 Peers MAY respond to an incoming message by sending one or more
 messages back to the transport it was received from.
 
+\[FIXME should this document stick to specifying what the gossip service
+does and leave peers and transports alone?\]
+
 # Gossip service protocol {#protocol}
 
-Gossip messages are ASCII messages in S-expression format sent over a
+All messages are ASCII messages in S-expression format sent over a
 reliable data stream.
 
-\[FIXME will implementors be sad about sexps and ask for json?\]
+TODO: change to JSON object {{!RFC4627}} encoding since that's used in CT
 
 ## AUTHENTICATE-REQUEST {#AUTHENTICATE-REQUEST}
 
@@ -140,7 +152,7 @@ service.
 
 - command = "gossip-authenticate-request-0"
 
-- shared-secret = string
+- shared-secret = base64-encoded string
 
 ## AUTHENTICATE-RESPONSE {#AUTHENTICATE-RESPONSE}
 
@@ -164,7 +176,7 @@ ENUMERATE-TRANSPORTS-RESPONSE messages are sent from the gossip
 service to a peer in response to an ENUMERATE-TRANSPORTS-REQUEST
 message.
 
-- command = "gossip-enumerate-transports-request-0"
+- command = "gossip-enumerate-transports-response-0"
 
 - transports = list of registered transports
 
@@ -198,7 +210,7 @@ a transport:
 Example of an incoming message, i.e. sent from a transport and
 received by one or more peers:
 
-     (gosisp-msg
+     (gossip-msg
        (command gossip-msg-0)
        (source gossip-transport-https)
        (timestamp 1414396811000)
@@ -206,12 +218,14 @@ received by one or more peers:
          467a28a27c206a26cdf7b36cc93e8c598e93592ef49ad3a8dc523a35e1f4bc0c)
        (gossip-data aW5jb21pbmcgZ29zc2lwIGRhdGEK))
 
+### Components of a message
+
 - command = "gossip-msg-0"
 
 - timestamp = 64bit integer in decimal
 
-NTP time when the message was received by the gossip service,
-in milliseconds since the epoch
+NTP time when the message was received by the gossip service, in
+milliseconds since the epoch
 
 - destination = transports
 
@@ -242,11 +256,11 @@ transports
 
 the log id of the transparency log gossiped about
 
-- gossip-data = opaque string, base64 encoded ({{!RFC4648}})
+- gossip-data = opaque string, base64-encoded
 
-gossip-data contains the payload of the message. Its exact contents
-depend on what kind of data is being gossiped but MUST include a
-signature made by the log indicated by the log-id in the same message.
+gossip-data exact contents depend on what kind of data is being
+gossiped but MUST include a signature made by the log indicated by
+'log-id'.
 
 # Examples
 
@@ -299,12 +313,12 @@ use.)
 
 # Security and privacy considerations
 
-- sending of sensitive data to the gossip service
-- protection against bad actors
+- TODO: sending of sensitive data to the gossip service
+- TODO: protection against bad actors
   - flooding attacks flushing gossip pools
     \[belongs in *T-specific specs?\]
-- gossiping messages being blocked
-- transports authenticating with gossip services
+- TODO: gossiping messages being blocked
+- TODO: transports authenticating with gossip services
 
 # Open questions
 
@@ -316,4 +330,5 @@ TBD
 
 # Contributors
 
-- benl -- the daemon idea
+The author would like to thank Ben Laurie for the idea with a gossip
+daemon.
