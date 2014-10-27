@@ -17,6 +17,7 @@ author:
 
 normative:
   RFC822:
+  RFC2119:
   RFC2246:
   RFC4346:
   RFC5246:
@@ -85,7 +86,7 @@ Messages MUST be processed according to {{draft-linus-trans-gossip}}.
 
 \[FIXME are there any http specific processing rules to be added?\]
 
-# Security and privacy considerations
+# Security considerations
 
 TBD
 

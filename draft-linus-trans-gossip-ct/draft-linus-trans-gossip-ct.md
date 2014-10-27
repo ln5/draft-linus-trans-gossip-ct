@@ -16,6 +16,7 @@ author:
   org: NORDUnet
 
 normative:
+  RFC2119:
   RFC6962:
   draft-linus-trans-gossip:
     title: Transparency Gossip
@@ -96,7 +97,7 @@ out of scope for this document.
 
 STH's are sent to a preconfigured gossip service in a
 {{draft-linus-trans-gossip}} GOSSIP-MSG message with 'gossip-data' as
-a JSON object {{!RFC4627}} with the following content:
+a JSON object {{!RFC7159}} with the following content:
 
 - sths: array of {{!RFC6962}} Signed Tree Head's
 
@@ -164,7 +165,7 @@ part of the same chain as available.
 
 Note that 'gossip-data' is base64-encoded.
 
-# Security and privacy considerations
+# Security considerations
 
 - TODO expand on why gossiping STH's is ok
 

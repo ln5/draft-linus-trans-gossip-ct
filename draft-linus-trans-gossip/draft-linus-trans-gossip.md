@@ -16,6 +16,7 @@ author:
   org: NORDUnet
 
 normative:
+  RFC2119:
 
 --- abstract
 
@@ -143,7 +144,7 @@ does and leave peers and transports alone?\]
 All messages are ASCII messages in S-expression format sent over a
 reliable data stream.
 
-TODO: change to JSON object {{!RFC4627}} encoding since that's used in CT
+TODO: change to JSON object {{!RFC7159}} encoding since that's used in CT
 
 ## AUTHENTICATE-REQUEST {#AUTHENTICATE-REQUEST}
 
@@ -277,7 +278,7 @@ Certificate Transparency.
              |            |
        web-browser[0]   tls-lib
 
-\[0\] same instance as the gossip peer "web-browser"
+    [0] same instance as the gossip peer "web-browser"
 
               web-server                      <-- gossip peer
                   |
@@ -287,7 +288,7 @@ Certificate Transparency.
                   |
              web-server[1]
 
-\[1\] same instance as the gossip peer "web-server"
+    [1] same instance as the gossip peer "web-server"
 
 The daemon listens to two separate sockets, one for peers and one for
 transports.
@@ -311,7 +312,7 @@ sent and received messages, making an echo transport useful for
 programs like web browsers which already have the transport ready for
 use.)
 
-# Security and privacy considerations
+# Security considerations
 
 - TODO: sending of sensitive data to the gossip service
 - TODO: protection against bad actors
