@@ -78,47 +78,83 @@ STH's and proofs.
 
 ### GOSSIP-MSG
 
+Gossip messages are text messages in S-expression format sent over a
+reliable data stream.
+
+Gossip messages are sent by peers and transports to the gossip
+service. The gossip service forwards messages from peers according to
+the 'destination' in the message. The gossip service forwards messages
+from transports to all connected peers.
+
+An outgoing message is sent by a peer and received by a transport.
+
+An incomgin message is sent by a transport and received by one or more
+peers.
+
+Example of an outgoing message, i.e. sent from a peer and received by
+a transport:
+
+       (gossip-msg
+         (protocol-version gossip-msg-0)
+         (destination (gossip-transport-https gossip-transport-tbd))
+         (timestamp 1414396810000)
+         (log-id
+           467a28a27c206a26cdf7b36cc93e8c598e93592ef49ad3a8dc523a35e1f4bc0c)
+         (gossip-data b3V0Z29pbmcgZ29zc2lwIGRhdGEK))
+
+Example of an incoming message, i.e. sent from a transport and
+received by one or more peers:
+
+     (gosisp-msg
+       (protocol-version gossip-msg-0)
+       (source gossip-transport-https)
+       (timestamp 1414396811000)
+       (log-id
+         467a28a27c206a26cdf7b36cc93e8c598e93592ef49ad3a8dc523a35e1f4bc0c)
+       (gossip-data aW5jb21pbmcgZ29zc2lwIGRhdGEK))
+
+\[FIXME will people be sad about sexps and ask for json?\]
+
 - protocol-version = "gossip-msg-0"
 
 - timestamp = 64bit integer
 
-NTP time of message receival by gossip service, milliseconds since the
-epoch
+NTP time when the message was received by the gossip service,
+in milliseconds since the epoch
 
-- direction = "outgoing" \| "incoming"
+- destination = transports
 
-outgoing messages go from a peer to one or more registered transports
-
-incoming messages go from a transport to all connected peers
-
-- destination = transports \| "all" \| ""
-
-transports = transport [transports]
-
-an incoming message has destination = ""
-
-destination denotes which transport(s) to send an outgoing message
+destination specifies which transport(s) to send an outgoing message
 over
 
-"all" means that the message should be sent to all registered
-transports
+destination is meaningful only in outgoing messages and MUST be
+ignored by peers
+
+transports = list of 'transport'
+
+transport = string | "all"
+
+transport is a string containing the name of a registered transport or
+the special string "all"
+
+transport "all" means that the message should be sent to all
+registered transports
 
 - source = transport \| ""
 
 an incoming message has source set to the transport it came in over
 
-an outgoing message has source = ""
-
-transport = a string containing the name of a registered transport
+source is meaningful only in incoming messages and MUST be ignored by
+transports
 
 - log-id = SHA-256 hash of a log's public key, 32 octets
 
 the log id of the transparency log gossiped about
 
-- datum = opaque blob
+- gossip-data = opaque string, base64 encoded
 
-datum contains the payload of the message. Its contents depend on what
-kind of data is being gossiped.
+gossip-data contains the payload of the message. Its contents depend
+on what kind of data is being gossiped.
 
 ## Validation of received messages {#validation}
 
@@ -141,6 +177,10 @@ messages back to the transport it was received from.
 A gossip transport is responsible for sending and receiving gossip
 messages over a specific protocol, like HTTP or XMPP.
 
+The way a transport uses its external protocol to convey gossip
+messages is specified by the transport itself and out of scope for
+this document.
+
 A transport registers with a gossip service, either by being compiled
 into the service, being dynamically loaded into it or by connecting to
 it over a socket endpoint, local or remote. In the case of a
@@ -151,6 +191,11 @@ message.
 ## Defined transports
 
 - gossip-transport-https = "gossip-transport-https"
+- gossip-transport-tls = TBD
+- gossip-transport-xmpp = TBD
+- gossip-transport-dns = TBD
+- gossip-transport-tor = TBD
+- gossip-transport-webrtc = TBD
 
 ## Transport protocol
 
