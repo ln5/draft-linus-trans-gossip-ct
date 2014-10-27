@@ -1,7 +1,7 @@
 ---
-title: Gossiping
+title: Transparency Gossip
 docname: draft-linus-trans-gossip-00
-date: 2014-10-26
+date: 2014-10-27
 category: exp
 pi: [toc, sortrefs, symrefs]
 ipr: trust200902
@@ -81,19 +81,103 @@ privacy implications for log clients and is not addressed by this
 document specifically. The gossip message format specified can still
 be useful for this task though.
 
-# Message format and processing
+# Overview
 
-## Message description {#message}
+TBD
 
-### GOSSIP-MSG
+# Transports
 
-Gossip messages are text messages in S-expression format sent over a
+A gossip transport is responsible for sending and receiving gossip
+messages over a specific protocol, like HTTPS or XMPP.
+
+The way a transport uses its external protocol to convey gossip
+messages is specified by the transport itself and out of scope for
+this document.
+
+A transport registers with a gossip service, either by being compiled
+into the service, being dynamically loaded into it or by connecting to
+it over a socket endpoint, local or remote. In the case of a
+connecting transport, the transport has to authenticate with the
+service by sending a shared secret in an {{AUTHENTICATE-REQUEST}}
+message.
+
+## Defined transports
+
+- gossip-transport-https = "gossip-transport-https"
+- gossip-transport-tls = TBD
+- gossip-transport-xmpp = TBD
+- gossip-transport-dns = TBD
+- gossip-transport-tor = TBD
+- gossip-transport-webrtc = TBD
+
+# Message format and processing {#message}
+
+The message format is described in {{GOSSIP-MSG}}.
+
+## Validation of received messages {#validation}
+
+Peers MUST validate all gossip messages, incoming and outoing, by
+verifying GOSSIP-MSG 'gossip-data' according to the rules of the log
+indicated by 'log-id'. Messages with an unknown log id or which
+signature don't check out correctly MUST be silently discarded.
+
+Transports MAY validate gossip messages before relaying them.
+
+Peers MAY respond to an incoming message by sending one or more
+messages back to the transport it was received from.
+
+# Gossip service protocol {#protocol}
+
+Gossip messages are ASCII messages in S-expression format sent over a
 reliable data stream.
 
+\[FIXME will implementors be sad about sexps and ask for json?\]
+
+## AUTHENTICATE-REQUEST {#AUTHENTICATE-REQUEST}
+
+AUTHENTICATE-REQUEST messages are sent from transports to the gossip
+service.
+
+- command = "gossip-authenticate-request-0"
+
+- shared-secret = string
+
+## AUTHENTICATE-RESPONSE {#AUTHENTICATE-RESPONSE}
+
+AUTHENTICATE-RESPONSE messages are sent from the gossip service to a
+transport as a response to an AUTHENTICATE-REQUEST message.
+
+- command = "gossip-authenticate-response-0"
+
+- response = "ok" \| "bad-auth"
+
+## ENUMERATE-TRANSPORTS-REQUEST {#ENUMERATE-TRANSPORTS-REQUEST}
+
+ENUMERATE-TRANSPORTS-REQUEST messages are sent from peers to the
+gossip service.
+
+- command = "gossip-enumerate-transports-request-0"
+
+## ENUMERATE-TRANSPORTS-RESPONSE {#ENUMERATE-TRANSPORTS-RESPONSE}
+
+ENUMERATE-TRANSPORTS-RESPONSE messages are sent from the gossip
+service to a peer in response to an ENUMERATE-TRANSPORTS-REQUEST
+message.
+
+- command = "gossip-enumerate-transports-request-0"
+
+- transports = list of registered transports
+
+## GOSSIP-MSG {#GOSSIP-MSG}
+
 Gossip messages are sent by peers and transports to the gossip
-service. The gossip service forwards messages from peers according to
-the 'destination' in the message. The gossip service forwards messages
-from transports to all connected peers.
+service.
+
+The gossip service MUST forward messages from peers to all registered
+transports given in 'destination' of the message.
+
+The gossip service MUST forward messages from transports to all
+connected peers.
 
 An outgoing message is sent by a peer and received by a transport.
 
@@ -104,7 +188,7 @@ Example of an outgoing message, i.e. sent from a peer and received by
 a transport:
 
        (gossip-msg
-         (protocol-version gossip-msg-0)
+         (command gossip-msg-0)
          (destination (gossip-transport-https gossip-transport-tbd))
          (timestamp 1414396810000)
          (log-id
@@ -115,16 +199,14 @@ Example of an incoming message, i.e. sent from a transport and
 received by one or more peers:
 
      (gosisp-msg
-       (protocol-version gossip-msg-0)
+       (command gossip-msg-0)
        (source gossip-transport-https)
        (timestamp 1414396811000)
        (log-id
          467a28a27c206a26cdf7b36cc93e8c598e93592ef49ad3a8dc523a35e1f4bc0c)
        (gossip-data aW5jb21pbmcgZ29zc2lwIGRhdGEK))
 
-\[FIXME will people be sad about sexps and ask for json?\]
-
-- protocol-version = "gossip-msg-0"
+- command = "gossip-msg-0"
 
 - timestamp = 64bit integer
 
@@ -165,64 +247,10 @@ the log id of the transparency log gossiped about
 gossip-data contains the payload of the message. Its contents depend
 on what kind of data is being gossiped.
 
-## Validation of received messages {#validation}
-
-Peers MUST validate all gossip messages, incoming and outoing, by
-verifying GOSSIP-MSG 'gossip-data' according to the rules of the log
-indicated by 'log-id'. Messages with an unknown log id or which
-signature don't check out correctly MUST be silently discarded.
-
-Transports MAY validate gossip messages before relaying them.
-
-Peers MAY respond to an incoming message by sending one or more
-messages back to the transport it was received from.
-
-# Transports
-
-A gossip transport is responsible for sending and receiving gossip
-messages over a specific protocol, like HTTPS or XMPP.
-
-The way a transport uses its external protocol to convey gossip
-messages is specified by the transport itself and out of scope for
-this document.
-
-A transport registers with a gossip service, either by being compiled
-into the service, being dynamically loaded into it or by connecting to
-it over a socket endpoint, local or remote. In the case of a
-connecting transport, the transport has to authenticate with the
-service by sending a shared secret in an AUTHENTICATE-REQUEST message.
-
-## Defined transports
-
-- gossip-transport-https = "gossip-transport-https"
-- gossip-transport-tls = TBD
-- gossip-transport-xmpp = TBD
-- gossip-transport-dns = TBD
-- gossip-transport-tor = TBD
-- gossip-transport-webrtc = TBD
-
-## Transport protocol
-
-### AUTHENTICATE-REQUEST
-
-- protocol-version = "gossip-authenticate-request-0"
-
-- shared-secret = string
-
-### AUTHENTICATE-RESPONSE
-
-- protocol-version = "gossip-authenticate-response-0"
-
-- response = "ok" \| "bad-auth"
-
-# Open questions
-
-- remove transports lacking a draft?
-
 # Examples
 
 This section describes how a gossiping system could be implemented for
-CT.
+Certificate Transparency.
 
 ## CT clients
 
@@ -276,6 +304,10 @@ use.)
     \[belongs in *T-specific specs?\]
 - gossiping messages being blocked
 - transports authenticating with gossip services
+
+# Open questions
+
+- remove transports lacking a draft?
 
 # IANA considerations
 
