@@ -1,4 +1,4 @@
-DOC = draft-linus-trans-gossip-transport-http
+DOC = draft-linus-trans-gossip-transport-https
 
 # Not much user servicable parts below this line.
 

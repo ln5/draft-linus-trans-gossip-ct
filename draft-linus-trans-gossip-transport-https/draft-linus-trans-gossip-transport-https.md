@@ -1,6 +1,6 @@
 ---
 title: Gossiping
-docname: draft-linus-trans-gossip-transport-http-00
+docname: draft-linus-trans-gossip-transport-https-00
 date: 2014-10-26
 category: exp
 pi: [toc, sortrefs, symrefs]
@@ -37,7 +37,7 @@ normative:
 # Introduction
 
 This document specifies a [draft-linus-trans-gossip] transport
-protocol for sending gossip messages over http.
+protocol for sending gossip messages over https.
 
 # Problem
 
