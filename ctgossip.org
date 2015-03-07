@@ -1,0 +1,333 @@
+* Monitors/auditors talk to web sites to learn about SCT's
+To facilitate detection of attacks against web clients where an
+adversary owns a CA key and MITM's the client connection serving a
+certificate trusted by the client, monitors/auditors collect
+suspicious SCT's seen in the wild by getting them from TLS servers on
+the internet. An SCT received over [SCT reporting] that the server has
+not seen before is a suspicious SCT.
+
+A monitor/auditor might either pull SCT's from web servers, allow web
+servers to push to it or do both. It should be noted that the pull
+model works only for web servers and not for other TLS enabled
+protocols like SMTP or XMPP.
+
+Collected SCT's are verified to be included in logs by asking logs for
+an inclusion proof for each and every SCT in an STH with a timestamp
+later than the SCT timestamp plus the MMD of the log. A failure
+indicates a misbehaving log.
+
+** TLS servers push
+Monitors/auditors provide a well known HTTP API for uploading SCT's.
+
+  POST <path>/ct/v1/monitor/scts
+
+  Input:
+
+    scts: An array of what add-chain is outputting, i.e. SCT's (sct
+    version, log id, sct timestamp, extensions and signature).
+
+A monitor/auditor SHOULD limit the number of SCT's they accept per
+request.
+
+** Monitors/auditors pull from web servers
+Monitors/auditors periodically contact a well known URL on web servers
+serving domains seen in log entries/SCT's to find out what SCT's they
+have seen about the domains they're serving.
+
+Auditors see SCT's when web clients report them.
+
+  GET <domain>/.well-known/ct/v1/monitor/scts
+
+  Output:
+
+    scts: An array of what add-chain is outputting, i.e. SCT's (sct
+    version, log id, sct timestamp, extensions and signature).
+
+
+** Privacy implications
+An auditor leaks information about which sites its clients visit by
+asking web servers about SCT's. The traffic to and from an auditor
+with only a few clients risk revealing sensitive information about its
+clients.
+
+An auditor MUST NOT send a request for SCT's to a web server when
+FIXME FIXME FIXME.
+* From: Tom Ritter <tom@ritter.vg>
+Subject: That Chat
+To: linus@torproject.org
+Date: Fri, 06 Mar 2015 11:15:11 +0100 (7 minutes, 31 seconds ago)
+X-Boundary: ________________________________________________________________________________
+
+
+
+Gossip Protocol is explicitly for defending against compromised logs.
+The adversary is therefore a compromised or malicious log. There is a
+partitioned log tree.
+
+We want some side of the tree (but ideally both sides of the tree) to
+see the other side.
+
+========
+
+A client collects SCTs about sites it visits.  Releasing these SCTs to
+anyone reveals information about the client's activity.  We have two
+options: i) we release the SCTs we collect, or ii) we attempt to
+amalgamate the SCTs into a a less-privacy-sensitive value, such as an STH.
+
+In ii) We could attempt to push more and more data down to the client.
+This is not desirable, for each SCT we send we would also need to
+include an inclusion proof and an STH.  To combine STH's over tie, we
+would need to push a multitude of tree nodes and STHs.  Finally, in the
+worst case scenario where an STH is actually malicious, we will never be
+able to push enough data down to the client to allow them to reconcile
+an invalid STH with a valid STH without turning them into a full
+Auditor.  To reconcile the STHs, the client must make an active query to
+an Auditor/Monitor/Log.  This active query may be blocked, and in
+general the client releasing data (even STH's) has privacy
+considerations.  Considering the complexity of pushing inclusion proofs,
+STHs, and nodes to clients, along with the complicated logic necessary
+on the client to build tree headers, this approach is undesirable.
+TODO: Maybe add another argument why the client reaching out to an
+Auditor for STH consistency proofs is a bad idea?
+
+In i) we are; however, releasing even more private information.  We want
+the client to only release the SCTs if a) we believe we have an
+acceptable method to release this data in a privacy preserving manner or
+b) we release the data to an entity who already has the data.
+
+In A) The only acceptable method we can imagine to release the data in a
+privacy preserving manner is Tor, which is unacceptable to build into
+the core protocol
+
+In B) there are several entities we could release it to.  We could
+release it to the DNS provider, the ISP, or whatever traffic carrier is
+used (VPN, Tor, etc). We cannot require these entities to run a service
+to do so.  If some additional trusted service was constructed
+(introducing a new trusted entity into the chain, but we ignore that) we
+were not able to identify a sufficiently acceptable way to release it to
+these providers in way that was reliable. For example, a network
+attacker can block access to the particular reporting server. Even if a
+client regains connection to the reporting server, the client may have
+amassed a considerable amount of state to report (all at once) - this is
+disk space and bandwidth. Additionally, carrying this much state on the
+client is undesirable, and it is important to erase it when the client
+wishes to erase browsing data.
+
+In B) there is one additional entity that knows the client is receiving
+a particular SCT - the website itself.
+
+A user agent connects to a website, and receives one or more SCTs.  If
+it can validate the SCT it records the SCT locally, as well as all the
+data needed to validate it.  When the client reconnects to the website,
+it receives additional SCTs.  If the client does not receive a SCT it
+has seen previously, it [Reports] the SCT and associated data to the web
+server by POSTing the data to a .well-known URL.
+ - There is no point in [reporting] a SCT which is identical to an SCT
+that was used to validate the existing connection.
+ - Note that there is a fingerprinting mechanism here, where a website
+is able to enumerate the trusted logs of the client
+   This attack is also possible if a client automatically creates or
+does not create a connection based on a minimum
+   number of SCTs received.
+ - The specific data the client notes is:
+   - the SCT from the server
+   - the leaf certificate
+   - the full certificate chain to a trust anchor.
+     While is not technically required, it greatly simplifies server
+filtering and can enable it to detect attacks it may otherwise miss
+
+This data is POSTed to the server at the well-known URL:
+example.com/.well-known/sct-feedback
+The data is JSON-formatted, as such:
+
+{
+	'certificate-chain' : [ array of ASCII base64 certificates ... ],
+	'sct' : ' sct_data ',
+	// Anything else?  Don't think we _need_ anything else...
+}
+
+The response is a 200 OK if it was successfully obtained.
+
+When a site receives a SCT and associated data from a client, it will
+perform several sanity checks on the submitted data.
+ - First it will match the recieved SCT to SCTs it has a copy of and
+believes to be valid.
+   This can be a bit-wise comparison, and if a match is encountered, the
+submitted SCT can be discarded.
+ - If the SCT does not match, the signature on the SCT should be verified.
+   (If the signature cannot be verified, because the issuing log is not
+configured, see XXX)
+ - If the SCT signature is valid, the server will want to validate that
+the SCT applies to an origin
+   that the site is authoritative for.  While strictly speaking this is
+not necessary, this turns the site
+   into an open relay of SCTs, and its buffers/cache/disk may fill.
+This could be used in a targeted attack
+   to fill the buffer before sending the malicious SCT to a client. We
+will assume the site wishes to .
+
+   Asserting the applicability of the origin can be accomplished with
+different optimizations.
+   At a minimum, the site must validate that the SCT is valid for the
+given data, and that the given data
+   (that is, the certificates) is valid for the origin.
+   An optimizations that exists is if the submitted cert is not valid
+for the origin, it can be discarded
+
+   While it is also possible for a site to discard the submission if the
+certificate does not chain to a
+   trusted CA - they SHOULD NOT do so.  Logs currently will not issue a
+SCT unless the certificate is
+   CA-signed, so it was clearly the case that the certificate was
+trusted by some log. Even in the case that
+   a future log does not require a CA-signed chain, it is unlikely to
+sign arbitrary requests for self-signed
+   certificates.
+
+XXX If a site receives a SCT submission that corresponds to a log that
+it does not recognize, there are several scenarios:
+  - it could be the case that this is a valid SCT from a properly
+behaving log the site simply doesn't know about
+  - it could be that it is a valid or invalid SCT from a nonsensical,
+untrusted log
+  - it could be that it is an invalid SCT from a valid log trusted by
+clients - indicating this is an attack
+To maximize the attempt at recognizing an attacker, a site MAY validate
+that the certificate chain submitted is validly
+signed by a CA the site trusts.
+If both the log is unknown to the site (but the log is trusted), and the
+CA is unknown to the site (but the CA is trusted)
+it will be difficult to distinguish between a spam entry and an actual
+attack.
+In this situation, the site MAY attempt to save the evidence, but this
+introduces the same buffers/cache/disk
+problems as before.
+
+========
+
+An auditor communicating with a log (to recieve inclusion proofs,
+consistency proofs, and other data) can reveal sensitive information.
+
+If an auditor is used by only a handful (or a single) client, inclusion
+proofs reveal fine-grained information about sites visited.
+This is even the case if the auditor receives SCTs from servers as well
+as clients.  An attacker watching connections to the auditor will be
+able to enumerate the servers the auditor has had connections with.  Any
+SCT coming from the auditor that does not correspond to a server the
+auditor communicated with is known to come from a client.
+
+========
+
+It is legal for a STH to be issued such that a STH uniquely identifies a
+SCT, by simply creating a new STH for each SCT issued.  However,
+this STH will generally not actually be used.  When auditors request
+inclusion proofs, they submit a STH for the proof to be based off of,
+and this STH may be the most recent STH.  The STH that uniquely
+identifies a certificate is _unlikely_ to actually be used.
+
+* From: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+Subject: Re: my notes
+To: Linus Nordberg <linus@nordberg.se>
+Date: Fri, 06 Mar 2015 11:54:14 +0100 (5 minutes, 24 seconds ago)
+X-Boundary: ________________________________________________________________________________
+
+Here's the message, Linus:
+
+
+hi linus and tom--
+
+here's what i wrote up:
+
+Privacy Considerations for CT gossip
+====================================
+
+CT deals with public data.  The data itself is not sensitive, but the
+relationships and requests between different parties may be sensitive.
+
+The six identified parties in the CT ecosystem are monitors, auditors,
+logs, clients, servers, and CAs.  We expect all monitors to act as
+auditors, though not all auditors will act as monitors.
+
+However, the existence of relationships between several parties is
+itself public information (or should be), and therefore is not
+sensitive.  For example, a server operator has a relationship with a
+log operator (perhaps indirectly through a CA) which is public by
+virtue of the fact that the server publishes an SCT from that log.  CT
+is not concerned with hiding this business relationship between the
+server and the log.
+
+The most sensitive relationships in the ecosystem (and the one that
+these privacy considerations attempt to address most strongly) are the
+relationships between clients and servers.  Client-server
+relationships can be aggregated into a network graph with potentially
+serious implications for correlative de-anonymization of clients and
+relationship-mapping or clustering of servers or of clients.
+
+Additionally, customized SCTs can be used to target or de-identify
+users: a site can request a custom SCT from a log, and only serve it
+to a given user.  Then, when any other colluding parties in the
+ecosystem see that specific SCT, they can identify the SCT as coming
+From targeted user.  This custom SCT will not show up in the logs (or
+be detectable by the monitors) because the logs contain only the
+signed information, and not the signature.
+
+Because the client-server relationship is sensitive, gossiping
+communications between clients and servers about unrelated SCTs is
+risky.
+
+Therefore, a client with an SCT for a given server should transmit
+that info in only two channels: to the server associated with the SCT
+itself; and to a trusted auditor, if one exists.
+
+Sending the SCT back to the same server leaks no additional
+information to the server; it reveals only that the client has seen
+the server before.  With the custom SCT approach described above, it
+also provides a potential fingerprinting channel.  This channel is no
+worse than the channels provided by TLS session tickets, HPKP and HSTS
+headers, HTTP Cookies, etc.
+
+User Agents which allow clients to clear history or cookies associated
+with an origin should clear stored SCTs associated with the origin as
+well.
+
+STHs are only of interest to auditors (and therefore monitors, since
+all monitors are auditors); non-auditor clients, servers, and CAs do
+not see STHs at all.  Because the STH is requested from the log
+independently of any SCT, logs cannot associate a fingerprinted SCT
+with an STH.  Custom STHs can be issued by a log attempting to
+fingerprint the auditors, but since the auditors can freely gossip
+STHs between themselves, the fingerprinting will not be effective.
+Since the existence of relationships between auditors and logs, and
+between auditors and each other is not sensitive, auditors can gossip
+STHs without concern.
+
+Auditors have no need to gossip SCTs among each other, and should not
+do so.
+
+Auditors should treat SCTs received from servers and clients as
+sensitive data.  In particular, auditors should not immediately demand
+inclusion proofs from logs upon receipt of an SCT.  Instead, auditors
+should mix traffic from multiple submissions together before demanding
+inclusion proofs from the logs.
+
+client->auditor relationship discovery
+-------------------------------------
+
+A client who chooses to trust an auditor by submitting SCTs to it
+should be aware that the existence of the relationship between client
+and auditor can be determined by a colluding log and server.  In this
+attack, the site generates a custom certificate, and sends it to the
+log, which gives the site a new SCT.  When the client next conects,
+the server gives this client (and only this client) the custom cert
+and SCT.  The server never sends the custom cert or SCT to any other
+than the targeted client.
+
+If the client has a trusted auditor, then it gives the auditor the
+SCT.  When the auditor checks the SCT with the (colluding) log, the
+log reveals the identity of the client's selected auditor.  This
+attack must add a single key to the logs for each client-auditor
+mapping.  We think this is an acceptable tradeoff.
+
+
+          --dkg
+ 
