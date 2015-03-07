@@ -331,5 +331,5 @@ TBD
 
 # Contributors
 
-The author would like to thank Ben Laurie for the idea with a gossip
+The author would like to thank Ben Laurie for the idea of a gossip
 daemon.

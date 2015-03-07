@@ -1,7 +1,7 @@
 ---
 title: Transparency Gossip HTTPS transport
-docname: draft-linus-trans-gossip-transport-https-00
-date: 2014-10-27
+docname: draft-linus-trans-gossip-transport-https-01
+date: 2015-03-09
 category: exp
 pi: [toc, sortrefs, symrefs]
 ipr: trust200902
@@ -49,25 +49,15 @@ mechanisms. This document does not specify such mechanisms.
 
 Gossip messages may contain sensitive information and MUST NOT be sent
 over connections which are not encrypted as described in {{!RFC2817}}
-or {{!RFC2818}} using TLS version 1.0 or higher. When applicable the
+or {{!RFC2818}} using TLS version 1.2 or higher. When applicable the
 server SHOULD be authenticated using X.509 certificates as described
 in {{!RFC2459}} or by other means.
 
-HTTPS gossip messages are sent in {{!RFC2616}} message headers with
-the field-name "TransGossip".
+Gossip messages can contain data that are sensitive or not. This is
+indicated in the messagee. An example of sensitive data is SCT's. An
+example of non sensitive data is STH's.
 
-An HTTPS transport
-
-- SHOULD send gossip messages to HTTP servers that have indicated that
-  they accept gossip by sending an HTTP response-header
-  "TransGossipEnabled" with the value "Yes"
-
-- MAY send gossip messages to HTTP servers that haven't indicated
-  willingness to accept gossip
-
-- MUST NOT send gossip messages to HTTP servers that have indicated
-  that they don't accept gossip by sending an HTTP response-header
-  "TransGossipEnabled" with the value "No"
+HTTPS gossip messages are sent as HTTPS GET or POST requests.
 
 # Message format and processing {#message}
 
