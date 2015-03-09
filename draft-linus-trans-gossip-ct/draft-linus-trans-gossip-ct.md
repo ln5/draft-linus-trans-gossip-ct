@@ -126,12 +126,6 @@ clients before storing them:
   3. if the leaf cert is not for a domain that the server is
   authoritative for, discard
 
-// dkg: what about invalid/unknown SCTs but valid X.509 certificate
-   chains?  Tom made an argument that servers should still be
-   interested in a novel valid cert chain even if it doesn't have an
-   SCT.  This would be similar to an HPKP report, but without needing
-   an HPKP header.
-
 Check number 1 is a pure optimisation. Check number 2 is to prevent
 spamming and attacks where an adversary can fill up the store prior to
 attacking a client. Check number 3 is to help misbehaving clients from
