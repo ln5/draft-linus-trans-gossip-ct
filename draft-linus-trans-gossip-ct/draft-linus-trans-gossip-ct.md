@@ -292,7 +292,7 @@ linked to a client indicates the following about that client:
   and the tree size indicate
 - that the client is talking, possibly indirectly, to the log indicated by the
   tree hash
-- which software and software version is being used
+- which software and software version is being used.
 
 There is a possible fingerprinting attack where a log issues a unique
 STH for targeted log auditor(s). This is similar to the fingerprinting
