@@ -206,7 +206,7 @@ Heads (STHs) with as many other auditors and monitors as possible.
 
 \[TBD gossip about inclusion proofs and consistency proofs too?\]
 
-Which STHs to share and how often gossip should happen is regarded
+Which STHs to share and how often gossip should happen is regarded as
 policy and out of scope for this document.
 
 Auditors and monitors SHOULD provide the following URL accepting GET
