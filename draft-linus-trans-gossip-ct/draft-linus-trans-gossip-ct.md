@@ -126,7 +126,11 @@ clients before storing them:
   3. if the leaf cert is not for a domain that the server is
   authoritative for, discard
 
-// dkg: what about invalid/unknown SCTs but valid X.509 certificate chains?
+// dkg: what about invalid/unknown SCTs but valid X.509 certificate
+   chains?  Tom made an argument that servers should still be
+   interested in a novel valid cert chain even if it doesn't have an
+   SCT.  This would be similar to an HPKP report, but without needing
+   an HPKP header.
 
 Check number 1 is a pure optimisation. Check number 2 is to prevent
 spamming and attacks where an adversary can fill up the store prior to
@@ -161,7 +165,14 @@ SCT feedback data:
 
   https://\<auditor\>/ct/v1/sct-feedback
 
-// dkg: why no .well-known here?  should this be the same structure as the client→server post?
+// dkg: why no .well-known here?  is it because auditors are running
+   their own service explcitly, not in the .well-known namespace?
+
+// dkg: This looks like the same structure as a client→server post --
+   it seems risky to syntactically conflate the two different
+   semantics "Here are some SCTs and certs i've seen for you"
+   (client→server) with "here are some SCTs and certs i've seen for
+   myself" (server→auditor)?
 
 Auditors SHOULD regularly poll HTTPS servers at the well-known
 sct-feedback URL. How to determine which domains to poll is outside
@@ -198,7 +209,10 @@ with the following content:
 The 'x509_chain' element MUST contain at least the leaf certificate
 and SHOULD contain the full chain to a known root.
 
-// dkg: the above seems wasteful, as it will likely cause a retransmission of the entire certificate chain for each SCT.  Since we're likely to have multiple SCTs per cert, we should collapse this.
+// dkg: the above seems wasteful, as it will likely cause a
+   retransmission of the entire certificate chain for each SCT.  Since
+   we're likely to have multiple SCTs per cert, we should collapse
+   this.
 
 ## STH gossip
 
@@ -235,9 +249,12 @@ content:
   - tree_head_signature: A TreeHeadSignature as defined in
     {{!RFC6962}} Section 3.5 for the above data.
 
-// dkg: this seems like it is missing any sort of log identifier.  presumably auditors can work on multiple logs.
+// dkg: this seems like it is missing any sort of log identifier.
+   presumably auditors can work on multiple logs.  How should they do
+   so?
 
-// dkg: there seems to be no indication of which STHs to include, and for how long.
+// dkg: there seems to be no indication of which STHs an auditor
+   should produce for these requests, and for how long.
 
 # Security considerations
 
