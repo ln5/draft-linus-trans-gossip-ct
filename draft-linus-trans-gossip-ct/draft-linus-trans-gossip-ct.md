@@ -137,19 +137,19 @@ HTTPS servers receiving SCT's from clients SHOULD share SCT's and
 certificate chains with CT auditors by either providing the well-known
 URL:
 
-  https://\<domain\>/.well-known/ct/v1/sct-feedback
+  https://\<domain\>/.well-known/ct/v1/sct-gossip
 
 or by HTTPS POSTing them to a number of preconfigured auditors.
 
 The data received in a GET of the well-known URL or sent in the POST
 is defined in {{SCTfeedback-dataformat}}.
 
-HTTPS servers SHOULD share all SCT's and certificate data they see that pass the checks above, but
-MAY as an optimisation chose to not share SCT's that the operator
-consider legitimate. An example of a legitimate SCT might be one that
-was received from a CA as part of acquisition of a
-certificate. Another example is an SCT received directly from a CT log
-when submitting a certificate chain.
+HTTPS servers SHOULD share all SCT's and certificate data they see
+that pass the checks above, but MAY as an optimisation chose to not
+share SCT's that the operator consider legitimate. An example of a
+legitimate SCT might be one that was received from a CA as part of
+acquisition of a certificate. Another example is an SCT received
+directly from a CT log when submitting a certificate chain.
 
 HTTPS servers MUST NOT share any other data that they may learn from
 the submission of SCT's by HTTP clients.
@@ -157,16 +157,7 @@ the submission of SCT's by HTTP clients.
 Auditors SHOULD provide the following URL accepting HTTPS POSTing of
 SCT feedback data:
 
-  https://\<auditor\>/ct/v1/sct-feedback
-
-// dkg: why no .well-known here?  is it because auditors are running
-   their own service explcitly, not in the .well-known namespace?
-
-// dkg: This looks like the same structure as a client→server post --
-   it seems risky to syntactically conflate the two different
-   semantics "Here are some SCTs and certs i've seen for you"
-   (client→server) with "here are some SCTs and certs i've seen for
-   myself" (server→auditor)?
+  https://\<auditor\>/ct/v1/sct-gossip
 
 Auditors SHOULD regularly poll HTTPS servers at the well-known
 sct-feedback URL. How to determine which domains to poll is outside
@@ -185,35 +176,30 @@ with the following content:
     first element is the end-entity certificate, the second chains to
     the first and so on.
 
-// dkg: does base64-encoded mean "pem-encoded" or does it mean "base64-encoded DER"?
+  - sct_data: An array of objects consisting of
 
-  - sct_version -- Version as defined in {{!RFC6962}} Section 3.2, in
-    decimal.
+    - sct_version -- Version as defined in {{!RFC6962}} Section 3.2,
+      in decimal.
 
-  - log_id -- LogID as defined in {{!RFC6962}} Section 3.2, base64
-    encoded.
+    - log_id -- LogID as defined in {{!RFC6962}} Section 3.2, base64
+      encoded.
 
-  - timestamp -- The SCT timestamp, in decimal.
+    - timestamp -- The SCT timestamp, in decimal.
 
-  - extensions -- CtExtensions as defined in {{!RFC6962}} Section 3.2,
-    base64 encoded.
+    - extensions -- CtExtensions as defined in {{!RFC6962}}
+      Section 3.2, base64 encoded.
 
-  - signature -- The SCT signature, base64 encoded.
+    - signature -- The SCT signature, base64 encoded.
 
 The 'x509_chain' element MUST contain at least the leaf certificate
 and SHOULD contain the full chain to a known root.
 
-// dkg: the above seems wasteful, as it will likely cause a
-   retransmission of the entire certificate chain for each SCT.  Since
-   we're likely to have multiple SCTs per cert, we should collapse
-   this.
-
 ## STH gossip
 
 The goal of gossiping about STH's is to detect logs that are
-presenting different (inconsistent) views of the log to different parties. CT auditors and monitors
-SHOULD gossip about Signed Tree Heads (STH's) with as many other
-auditors and monitors as possible.
+presenting different (inconsistent) views of the log to different
+parties. CT auditors and monitors SHOULD gossip about Signed Tree
+Heads (STH's) with as many other auditors and monitors as possible.
 
 \[TBD gossip about inclusion proofs and consistency proofs too?\]
 
@@ -228,7 +214,7 @@ requests returning STH's:
 The data returned is a JSON object {{!RFC7159}} with the following
 content:
 
-- sth-gossip: An array consisting of
+- sth_gossip: An array consisting of
 
   - sth_version -- Version as defined in {{!RFC6962}} Section 3.2,
     base64 encoded. It's the version of the protocol to which the
@@ -243,12 +229,8 @@ content:
   - tree_head_signature: A TreeHeadSignature as defined in
     {{!RFC6962}} Section 3.5 for the above data.
 
-// dkg: this seems like it is missing any sort of log identifier.
-   presumably auditors can work on multiple logs.  How should they do
-   so?
-
-// dkg: there seems to be no indication of which STHs an auditor
-   should produce for these requests, and for how long.
+  - log_id -- LogID as defined in {{!RFC6962}} Section 3.2, base64
+    encoded.
 
 # Security considerations
 
@@ -318,7 +300,6 @@ the following factors:
 - because auditors regularly exchange STH's with each other, the
   re-appearance of a targeted STH from some auditor does not imply
   that the auditor was the original one targeted by the log.
-  
 
 # IANA considerations
 
