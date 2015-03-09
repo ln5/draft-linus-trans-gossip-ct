@@ -314,3 +314,19 @@ TBD
 
 The authors would like to thank Tom Ritter and Magnus Ahltorp for
 valuable contributions.
+
+# ChangeLog
+
+## Changes between -00 and -01
+
+- Add the SCT feedback mechanism: Clients send SCTs to originating web
+  server which shares them with auditors.
+- Stop assuming that clients see STHs.
+- Don't use HTTP headers but instead .well-known URL's -- avoid that
+  battle.
+- Stop referring to trans-gossip and trans-gossip-transport-https --
+  too complicated.
+- Remove all protocols but HTTPS in order to simplify -- let's come
+  back and add more later.
+- Add more reasoning about privacy.
+- Do specify data formats.
