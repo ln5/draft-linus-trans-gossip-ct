@@ -56,11 +56,11 @@ recipients.
 
 - HTTP clients and servers (SCT feedback)
 - HTTP servers and CT auditors (SCT feedback)
-- CT auditors and monitors among themselves (STH gossip)
+- CT auditors and monitors (STH gossip)
 
 # What kind of data to gossip about {#what}
 
-There are two separate gossip streams
+There are two separate gossip streams:
 
 - SCT feedback, transporting SCT's from clients to auditors
 - STH gossip, sharing STH's between auditors/monitors
@@ -124,34 +124,35 @@ leaking what sites they visit.
 
 ### HTTP server to auditors
 
-HTTP servers that are receiving SCT's from clients SHOULD share SCT's
-and certificate chains with CT auditors by either providing the
-.well-known URL
+HTTP servers receiving SCT's from clients SHOULD share SCT's and
+certificate chains with CT auditors by either providing the well-known
+URL:
 
   https://<domain>/.well-known/ct/v1/sct-feedback
 
-or by POSTing them to a number of preconfigured auditors.
+or by HTTP POSTing them to a number of preconfigured auditors.
 
 The data received in a GET of the well-known URL or sent in the POST
 is defined in {{#dataformat}}.
 
-HTTP servers SHOULD share all SCT's and certificate data but MAY as an
-optimisation chose to not send SCT's that the operator consider
-legitimate. An example of a legitimate SCT might be one that was
-received from a CA as part of acquisition of a certificate. Another
-example is an SCT received directly from a CT log.
+HTTP servers SHOULD share all SCT's and certificate data they see but
+MAY as an optimisation chose to not share SCT's that the operator
+consider legitimate. An example of a legitimate SCT might be one that
+was received from a CA as part of acquisition of a
+certificate. Another example is an SCT received directly from a CT log
+when submitting a certificate chain.
 
-HTTP servers MUST NOT share any other data or meta data learned from
-the submission of SCT's from clients.
+HTTP servers MUST NOT share any other data that they may learn from
+the submission of SCT's by HTTP clients.
 
-CT auditors SHOULD provide the following URL accepting POSTing of SCT
-feedback data:
+Auditors SHOULD provide the following URL accepting HTTP POSTing of
+SCT feedback data:
 
   https://<<auditor>/ct/v1/sct-feedback
 
-CT auditors SHOULD regularly poll HTTP servers on the internet at the
-well-known sct-feedback URL. How to determine which domains to poll is
-outside the scope of this document but it MUST NOT be influenced by
+Auditors SHOULD regularly poll HTTP servers at the well-known
+sct-feedback URL. How to determine which domains to poll is outside
+the scope of this document but the selection MUST NOT be influenced by
 potential HTTP clients connecting directly to the auditor.
 
 ### SCT feedback data format {#dataformat}
@@ -185,20 +186,24 @@ and SHOULD contain the full chain to a known root.
 ## STH gossip
 
 The goal of gossiping about STH's is to detect logs that are
-presenting more than one view of the log.
-
-CT auditors and monitors SHOULD gossip about Signed Tree Heads (STH's)
-with as many other auditors and monitors as possible. 
-
-Which STH's to send and how often is part of gossiping strategy and
-out of scope for this document.
+presenting more than one view of the log. CT auditors and monitors
+SHOULD gossip about Signed Tree Heads (STH's) with as many other
+auditors and monitors as possible.
 
 \[TBD gossip about inclusion proofs and consistency proofs too?\]
 
-STH's are sent to FIXME as a JSON object {{!RFC7159}} with the
-following content:
+Which STH's to share and how often gossip should happen is regarded
+policy and out of scope for this document.
 
-- sth-gossip: An array of consisting of
+Auditors and monitors SHOULD provide the following URL accepting GET
+requests returning STH's:
+
+  https://<auditor-or-monitor>/ct/v1/sth-gossip
+
+The data returned is a JSON object {{!RFC7159}} with the following
+content:
+
+- sth-gossip: An array consisting of
 
   - sth_version -- Version as defined in {{!RFC6962}} section 3.2,
     base64 encoded. It's the version of the protocol to which the
@@ -215,24 +220,56 @@ following content:
 
 # Security considerations
 
-- TODO expand on why gossiping STH's is ok
+## Privacy considerations wrt SCT feedback {#SCT-privacy}
 
-- TODO expand on why gossiping SCT's is bad for privacy in the general
-  case
+HTTP clients which allow users to clear history or cookies associated
+with an origin MUST clear stored SCT's associated with the origin as
+well.
 
-An STH contains:
-- the size of the tree being signed
-- a timestamp indicating the time when the tree was signed
-- the merkle tree hash of the tree being signed
-- a signature made by the log
+Auditors should treat all SCT's as sensitive data. SCT's received
+directly from an HTTP client, i.e. the auditor is a trusted auditor
+from the clients perspective, are especially sensitive. Auditors MUST
+NOT share such SCT's in any way, including sending them to an external
+log, without first mixing them with multiple other SCT's learned
+through submissions from multiple other clients. The details of mixing
+SCT's are TBD.
 
-An STH linked to a client may indicate the following about that
-client:
-- it's gossiping
-- it's been using CT at least until the timestamp and tree size
-  indicate
-- it's talking, indirectly, to the log indicated by the tree hash
+There is a possible fingerprinting attack where a log issues a unique
+SCT for targeted log client(s). Colluding log and HTTP server
+operators could therefore be a threat to the privacy of HTTP
+clients. Given all the other opportunities for HTTP servers to
+fingerprint clients -- TLS session tickets, HPKP and HSTS headers,
+HTTP Cookies, etc. -- this is acceptable.
+
+The fingerprinting attack described above could be avoided by
+requiring that logs i) MUST return the same SCT for a given cert chain
+({{!RFC6962}} section 3) and ii) use a deterministic signature scheme
+when signing the SCT ({{!RFC6962}} section 2.1.4 -- {{!RFC6962#2.1.4}}).
+
+### Rationale for the SCT feedback mechanism
+
+SCT's contain information that typically links it to a particular web
+site. Because the client-server relationship is sensitive, gossip
+between clients and servers about unrelated SCT's is risky. Therefore,
+a client with an SCT for a given server should transmit that
+information in only two channels: to a server associated with the SCT
+itself; and to a trusted CT auditor, if one exists.
+
+## Privacy considerations wrt STH gossip
+
+Nowhere in this document is it suggested that users deal with STH's
+but for completeness here's a privacy analysis for STH's. An STH
+linked to a user indicates the following about that user:
+- that it's gossiping
+- that it's been using CT at least until the time that the timestamp
+  and the tree size indicate
+- that it's talking, possibly indirectly, to the log indicated by the
+  tree hash
 - which software and software version is being used
+
+There is a possible fingerprinting attack where a log issues a unique
+STH for targeted log client(s). This is similar to the fingerprinting
+attack described in {{#SCT-privacy}}
 
 # Open questions
 
