@@ -22,35 +22,41 @@ author:
     org: ACLU
 
 normative:
-  RFC2119:
 
 --- abstract
 
-This document describes gossiping in Certificate Transparency
-{{!RFC6962}}. In order to share SCT's in a privacy preserving manner,
-HTTP clients send SCT's to originating HTTP servers which in turn
-share SCT's with CT auditors. CT auditors and monitors share STH's
-with each other.
+This document describes two gossiping mechanisms for Certificate
+Transparency {{!RFC6962}}; SCT feedback and STH gossip. In order for
+HTTP clients to share SCT's with CT auditors in a privacy preserving
+manner they send SCT's to originating HTTP servers which in turn share
+the SCT's with CT auditors. CT auditors and monitors share STH's among
+each other.
 
 --- middle
 
-# Introduction
-
-TBD
-
 # Problem
 
-Gossiping about what's known about CT logs helps solving the problem
-of detecting malicious logs showing different views to different
-clients, a.k.a. the partitioning attack.
+Public append-only untrusted logs have to be monitored for
+consistency, i.e. that they don't break their promise of not rewriting
+history. Monitors and other log clients need to exchange information
+about monitored logs in order to be able to detect a partitioning
+attack.
 
-The separate problem of how to disseminate information about a log
-misbehaving in other ways may be helped by gossiping but poses a
-potential threat to the privacy of end users. Gossiping about log data
-linkable to a specific log entry and through that to a specific site
-has to be constrained to using the gossiping message format and
-gossiping transports for sending sensitive data only to particular
-recipients.
+A partitioning attack is when a log serves different views of the log
+to different clients. Each client would be able to verify the
+append-only attribute of the log while in the extreme case being the
+only client seeing this particular view.
+
+Gossiping about what's known about logs helps solving the problem of
+detecting malicious or compromised logs mounting such a partitioning
+attack. We want some side of the partitioned tree, and ideally both
+sides, to see the other side.
+
+Disseminating known information about a log poses a potential threat
+to the privacy of end users. Gossiping about data which is linkable to
+a specific log entry and by that to a specific site has to take
+privacy considerations into account in order not to leak sensitive
+information.
 
 # Who should gossip {#who}
 
@@ -58,7 +64,7 @@ recipients.
 - HTTP servers and CT auditors (SCT feedback)
 - CT auditors and monitors (STH gossip)
 
-# What kind of data to gossip about {#what}
+# What to gossip about and how {#whathow}
 
 There are two separate gossip streams:
 
@@ -70,28 +76,30 @@ There are two separate gossip streams:
 The goal of SCT feedback is for clients to share SCT's and certificate
 chains with CT auditors and monitors in a privacy preserving manner.
 
-HTTP clients SHOULD store and later send some of the SCT's they see to
-some particular HTTP servers by posting them, together with their
-associated certificate chains, to a .well-known URL.
+HTTP clients store SCT's and certificate chains they see and later
+send them to originating HTTP servers by posting them to a .well-known
+URL. This is described in {{SCTfeedback-clisrv}}.
 
-HTTP servers SHOULD store and later share SCT's with CT auditors by
-either posting them or making them available on a .well-known URL.
+HTTP servers store SCT's received from clients and later share them
+with CT auditors by either posting them or making them available on a
+.well-known URL. This is described in {{SCTfeedback-srvaud}}.
 
-HTTP clients MAY send SCT's and cert chains directly to auditors. It
-should be noted that there are major privacy implications of doing so.
+HTTP clients MAY send SCT's and cert chains directly to auditors. Note
+that there are privacy implications of doing so, outlined in
+{{privacy-SCT}}.
 
-### HTTP client to server
+### HTTP client to server {#SCTfeedback-clisrv}
 
-A browser (B) connects to an HTTP server (S) serving domain (D). (B)
-receives a set of SCT's as part of the TLS handshake. (B) SHOULD
-discard SCT's that are not signed by a known log. (B) SHOULD store the
-remaining SCT's together with their corresponding certificate chains
-on disk.
+An HTTP client connects to an HTTP server for a particular domain. The
+client receives a set of SCT's as part of the TLS handshake. The
+client MUST discard SCT's that are not signed by a known log and
+SHOULD store the remaining SCT's together with their corresponding
+certificate chains for later retrieval.
 
-When (B) later reconnects to an HTTP server (S') serving domain (D) it
-again receives a set of SCT's. (B) MUST update its store of SCT's for
-(D) and SHOULD send to (S') the ones in the store that were not
-received from (S').
+When the client later reconnects to any HTTP server for the same
+domain it again receives a set of SCT's. The client MUST update its
+store of SCT's for the domain and MUST send to the server the ones in
+its store that were not received from that server.
 
 Note that the SCT store also contains SCT's received in certificates.
 
@@ -99,13 +107,13 @@ An SCT MUST NOT be sent to any other HTTP server than one serving the
 domain that the certificate signed by the SCT refers to.
 
 SCT's and corresponding certificates are POSTed to the originating
-HTTP server at the well-known URL
+HTTP server at the well-known URL:
 
-  https://<domain>/.well-known/ct/v1/sct-feedback
+  https://\<domain\>/.well-known/ct/v1/sct-feedback
 
-The data sent in the POST is defined in {{#dataformat}}.
+The data sent in the POST is defined in {{SCTfeedback-dataformat}}.
 
-HTTP servers SHOULD perform a number of sanity checks on SCT's from
+HTTP servers MUST perform a number of sanity checks on SCT's from
 clients before storing them:
 
   1. if a bit-wise compare of the SCT matches one already in the
@@ -122,18 +130,18 @@ spamming and attacks where an adversary can fill up the store prior to
 attacking a client. Check number 3 is to help misbehaving clients from
 leaking what sites they visit.
 
-### HTTP server to auditors
+### HTTP server to auditors {#SCTfeedback-srvaud}
 
 HTTP servers receiving SCT's from clients SHOULD share SCT's and
 certificate chains with CT auditors by either providing the well-known
 URL:
 
-  https://<domain>/.well-known/ct/v1/sct-feedback
+  https://\<domain\>/.well-known/ct/v1/sct-feedback
 
 or by HTTP POSTing them to a number of preconfigured auditors.
 
 The data received in a GET of the well-known URL or sent in the POST
-is defined in {{#dataformat}}.
+is defined in {{SCTfeedback-dataformat}}.
 
 HTTP servers SHOULD share all SCT's and certificate data they see but
 MAY as an optimisation chose to not share SCT's that the operator
@@ -148,14 +156,14 @@ the submission of SCT's by HTTP clients.
 Auditors SHOULD provide the following URL accepting HTTP POSTing of
 SCT feedback data:
 
-  https://<<auditor>/ct/v1/sct-feedback
+  https://\<auditor\>/ct/v1/sct-feedback
 
 Auditors SHOULD regularly poll HTTP servers at the well-known
 sct-feedback URL. How to determine which domains to poll is outside
 the scope of this document but the selection MUST NOT be influenced by
 potential HTTP clients connecting directly to the auditor.
 
-### SCT feedback data format {#dataformat}
+### SCT feedback data format {#SCTfeedback-dataformat}
 
 The data shared between HTTP clients and servers as well as between
 HTTP servers and CT auditors/monitors is a JSON object {{!RFC7159}}
@@ -167,15 +175,15 @@ with the following content:
     first element is the end-entity certificate, the second chains to
     the first and so on.
 
-  - sct_version -- Version as defined in {{!RFC6962}} section 3.2, in
+  - sct_version -- Version as defined in {{!RFC6962}} Section 3.2, in
     decimal.
 
-  - log_id -- LogID as defined in {{!RFC6962}} section 3.2, base64
+  - log_id -- LogID as defined in {{!RFC6962}} Section 3.2, base64
     encoded.
 
   - timestamp -- The SCT timestamp, in decimal.
 
-  - extensions -- CtExtensions as defined in {{!RFC6962}} section 3.2,
+  - extensions -- CtExtensions as defined in {{!RFC6962}} Section 3.2,
     base64 encoded.
 
   - signature -- The SCT signature, base64 encoded.
@@ -198,14 +206,14 @@ policy and out of scope for this document.
 Auditors and monitors SHOULD provide the following URL accepting GET
 requests returning STH's:
 
-  https://<auditor-or-monitor>/ct/v1/sth-gossip
+  https://\<auditor-or-monitor\>/ct/v1/sth-gossip
 
 The data returned is a JSON object {{!RFC7159}} with the following
 content:
 
 - sth-gossip: An array consisting of
 
-  - sth_version -- Version as defined in {{!RFC6962}} section 3.2,
+  - sth_version -- Version as defined in {{!RFC6962}} Section 3.2,
     base64 encoded. It's the version of the protocol to which the
     signature conforms.
 
@@ -216,11 +224,28 @@ content:
   - sha256_root_hash: The Merkle Tree Hash of the tree, in base64.
 
   - tree_head_signature: A TreeHeadSignature as defined in
-    {{!RFC6962}} section 3.5 for the above data.
+    {{!RFC6962}} Section 3.5 for the above data.
 
 # Security considerations
 
-## Privacy considerations wrt SCT feedback {#SCT-privacy}
+## Privacy considerations
+
+The most sensitive relationships in the CT ecosystem are the
+relationships between HTTP clients and HTTP servers. Client-server
+relationships can be aggregated into a network graph with potentially
+serious implications for correlative de-anonymisation of clients and
+relationship-mapping or clustering of servers or of clients.
+
+### Privacy and SCT's {#privacy-SCT}
+
+SCT's contain information that typically links it to a particular web
+site. Because the client-server relationship is sensitive, gossip
+between clients and servers about unrelated SCT's is risky. Therefore,
+a client with an SCT for a given server should transmit that
+information in only two channels: to a server associated with the SCT
+itself; and to a trusted CT auditor, if one exists.
+
+### Privacy in SCT feedback {#privacy-SCTfeedback}
 
 HTTP clients which allow users to clear history or cookies associated
 with an origin MUST clear stored SCT's associated with the origin as
@@ -243,19 +268,10 @@ HTTP Cookies, etc. -- this is acceptable.
 
 The fingerprinting attack described above could be avoided by
 requiring that logs i) MUST return the same SCT for a given cert chain
-({{!RFC6962}} section 3) and ii) use a deterministic signature scheme
-when signing the SCT ({{!RFC6962}} section 2.1.4 -- {{!RFC6962#2.1.4}}).
+({{!RFC6962}} Section 3) and ii) use a deterministic signature scheme
+when signing the SCT ({{!RFC6962}} Section 2.1.4).
 
-### Rationale for the SCT feedback mechanism
-
-SCT's contain information that typically links it to a particular web
-site. Because the client-server relationship is sensitive, gossip
-between clients and servers about unrelated SCT's is risky. Therefore,
-a client with an SCT for a given server should transmit that
-information in only two channels: to a server associated with the SCT
-itself; and to a trusted CT auditor, if one exists.
-
-## Privacy considerations wrt STH gossip
+### Privacy in STH gossip
 
 Nowhere in this document is it suggested that users deal with STH's
 but for completeness here's a privacy analysis for STH's. An STH
@@ -269,11 +285,7 @@ linked to a user indicates the following about that user:
 
 There is a possible fingerprinting attack where a log issues a unique
 STH for targeted log client(s). This is similar to the fingerprinting
-attack described in {{#SCT-privacy}}
-
-# Open questions
-
-- TODO active vs. passive participants
+attack described in {{privacy-SCTfeedback}}
 
 # IANA considerations
 
@@ -281,4 +293,4 @@ TBD
 
 # Contributors
 
-The authors would like to thank Tom Ritter for valuable discussions.
+The authors would like to thank Tom Ritter for valuable contributions.
