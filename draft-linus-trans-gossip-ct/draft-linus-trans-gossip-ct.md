@@ -217,7 +217,7 @@ requests returning STHs:
 The data returned is a JSON object {{!RFC7159}} with the following
 content:
 
-- sth_gossip: An array consisting of
+- sth_gossip: An array of objects consisting of
 
   - sth_version -- Version as defined in {{!RFC6962}} Section 3.2, as
     a number. It's the version of the protocol to which the signature
