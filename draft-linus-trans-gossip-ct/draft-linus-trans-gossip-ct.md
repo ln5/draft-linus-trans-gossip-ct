@@ -104,6 +104,9 @@ its store that were not received from that server.
 
 Note that the SCT store also contains SCTs received in certificates.
 
+The client MUST NOT send the same set of SCTs to the same server more
+often than TBD.
+
 An SCT MUST NOT be sent to any other HTTPS server than one serving the
 domain that the certificate signed by the SCT refers to.
 
@@ -309,4 +312,5 @@ TBD
 
 # Contributors
 
-The authors would like to thank Tom Ritter for valuable contributions.
+The authors would like to thank Tom Ritter and Magnus Ahltorp for
+valuable contributions.
