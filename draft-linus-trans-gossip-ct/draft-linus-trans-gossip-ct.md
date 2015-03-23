@@ -76,8 +76,12 @@ The goal of SCT feedback is for clients to share SCTs and certificate
 chains with CT auditors and monitors in a privacy-preserving manner.
 
 HTTPS clients store SCTs and certificate chains they see and later
-send them to originating HTTPS servers by posting them to a .well-known
-URL. This is described in {{SCTfeedback-clisrv}}.
+send them to originating HTTPS servers by posting them to a
+.well-known URL. This is described in {{SCTfeedback-clisrv}}. Note
+that clients send the same SCTs and chains to servers multiple times
+with the assumption that a potential man-in-the-middle attack
+eventually will cease so that an honest server will receive collected
+malicious SCTs and chains.
 
 HTTPS servers store SCTs and certificate chains received from clients
 and later share them with CT auditors by either posting them or making
