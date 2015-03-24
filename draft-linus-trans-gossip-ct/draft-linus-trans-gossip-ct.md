@@ -33,7 +33,7 @@ each other.
 
 --- middle
 
-# Problem
+# Introduction
 
 Public append-only untrusted logs have to be monitored for
 consistency, i.e. that they should never rewrite
@@ -56,6 +56,13 @@ to the privacy of end users. Gossiping about data which is linkable to
 a specific log entry and by that to a specific site has to take
 privacy considerations into account in order not to leak sensitive
 information.
+
+However, there is no loss in privacy if a client sends SCTs for a
+given site to the site named in the SCT, since the site's access logs
+would already indicate that the client is accessing that site. In this
+way a site can accumulate records of SCTs that have been issued by
+various logs for that site, providing a consolidated repository of
+SCTs which can be queried by auditors.
 
 # Terminology
 
