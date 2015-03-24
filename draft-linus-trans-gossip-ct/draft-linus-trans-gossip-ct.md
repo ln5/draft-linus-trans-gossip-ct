@@ -303,7 +303,7 @@ attack described in {{privacy-SCTfeedback}}, but it is mitigated by
 the following factors:
 
 - the relationship between auditors and logs is not sensitive in the
-  way that the relationship between clients and servers is.
+  way that the relationship between clients and servers is;
 
 - because auditors regularly exchange STHs with each other, the
   re-appearance of a targeted STH from some auditor does not imply
