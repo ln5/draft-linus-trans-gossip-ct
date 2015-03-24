@@ -57,6 +57,12 @@ a specific log entry and by that to a specific site has to take
 privacy considerations into account in order not to leak sensitive
 information.
 
+# Terminology
+
+This document relies on terminology and data structures defined in
+{{!RFC6962}}, including STH, SCT, Version, LogID, SCT timestamp,
+CtExtensions, SCT signature, Merkle Tree Hash.
+
 # Who should gossip {#who}
 
 - HTTPS clients and servers (SCT feedback)
@@ -184,18 +190,20 @@ with the following content:
 
   - sct_data: An array of objects consisting of
 
-    - sct_version -- Version as defined in {{!RFC6962}} Section 3.2,
-      as a number.
+    - sct_version: Version as defined in {{!RFC6962}} Section 3.2, as
+      a number.
 
-    - log_id -- LogID as defined in {{!RFC6962}} Section 3.2, as a
+    - log_id: LogID as defined in {{!RFC6962}} Section 3.2, as a
       base64 encoded string.
 
-    - timestamp -- The SCT timestamp, as a number.
+    - timestamp: The SCT timestamp as defined in {{!RFC6962}}
+      Section 3.2, as a number.
 
     - extensions -- CtExtensions as defined in {{!RFC6962}}
       Section 3.2, as a base64 encoded string.
 
-    - signature -- The SCT signature, as a base64 encoded string.
+    - signature -- The SCT signature as defined in {{!RFC6962}}
+      Section 3.2, as a base64 encoded string.
 
 The 'x509_chain' element MUST contain at least the leaf certificate
 and SHOULD contain the full chain to a known root.
@@ -222,23 +230,24 @@ content:
 
 - sth_gossip: An array of objects consisting of
 
-  - sth_version -- Version as defined in {{!RFC6962}} Section 3.2, as
-    a number. It's the version of the protocol to which the signature
-    conforms.
+  - sth_version: Version as defined in {{!RFC6962}} Section 3.2, as
+    a number. It's the version of the protocol to which the
+    sth_gossip object conforms.
 
   - tree_size: The size of the tree, in entries, as a number.
 
-  - timestamp: The timestamp, as a number.
+  - timestamp: The timestamp of the STH as defined in {{!RFC6962}}
+    Section 3.2, as a number.
 
-  - sha256_root_hash: The Merkle Tree Hash of the tree, as a base64
-    encoded string.
+  - sha256_root_hash: The Merkle Tree Hash of the tree as defined in
+    {{!RFC6962}} Section 2.1, as a base64 encoded string.
 
   - tree_head_signature: A TreeHeadSignature as defined in
     {{!RFC6962}} Section 3.5 for the above data, as a base64 encoded
     string.
 
-  - log_id -- LogID as defined in {{!RFC6962}} Section 3.2, as a
-    base64 encoded string.
+  - log_id: LogID as defined in {{!RFC6962}} Section 3.2, as a base64
+    encoded string.
 
 # Security considerations
 
@@ -315,8 +324,8 @@ TBD
 
 # Contributors
 
-The authors would like to thank Tom Ritter and Magnus Ahltorp for
-valuable contributions.
+The authors would like to thank Tom Ritter, Magnus Ahltorp and
+Benjamin Kaduk for valuable contributions.
 
 # ChangeLog
 
