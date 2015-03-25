@@ -306,11 +306,15 @@ when signing the SCT ({{!RFC6962}} Section 2.1.4).
 Nowhere in this document is it suggested that HTTPS clients deal with STHs
 but for completeness here's a privacy analysis for STHs. An STH
 linked to a client indicates the following about that client:
-- that the client gossips
-- that the client been using CT at least until the time that the timestamp
-  and the tree size indicate
-- that the client is talking, possibly indirectly, to the log indicated by the
-  tree hash
+
+- that the client gossips;
+
+- that the client been using CT at least until the time that the
+  timestamp and the tree size indicate;
+
+- that the client is talking, possibly indirectly, to the log
+  indicated by the tree hash;
+
 - which software and software version is being used.
 
 There is a possible fingerprinting attack where a log issues a unique
