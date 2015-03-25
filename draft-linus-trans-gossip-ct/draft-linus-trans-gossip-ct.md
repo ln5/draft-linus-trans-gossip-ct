@@ -133,17 +133,18 @@ HTTPS server at the well-known URL:
 
 The data sent in the POST is defined in {{SCTfeedback-dataformat}}.
 
-HTTPS servers MUST perform a number of sanity checks on SCTs from
-clients before storing them:
+HTTPS servers perform a number of sanity checks on SCTs from clients
+before storing them:
 
   1. if a bit-wise compare of the SCT matches one already in the
-  store, discard
+  store, the SCT MAY be discarded
 
   2. if the SCT can't be verified to be a valid SCT for the
-  accompanying leaf cert, issued by a known log, discard
+  accompanying leaf cert, issued by a known log, the SCT MUST be
+  discarded
 
   3. if the leaf cert is not for a domain that the server is
-  authoritative for, discard
+  authoritative for, the SCT MUST be discarded
 
 Check number 1 is a pure optimisation. Check number 2 is to prevent
 spamming and attacks where an adversary can fill up the store prior to
