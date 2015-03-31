@@ -330,6 +330,51 @@ the following factors:
   re-appearance of a targeted STH from some auditor does not imply
   that the auditor was the original one targeted by the log.
 
+
+### Trusted Auditors for HTTPS Clients
+
+Some HTTPS clients may choose to use a trusted auditor.  This trust
+relationship leaks a certain amount of information from the client to
+the auditor.  In particular, it is likely to identify the web sites
+that the client has visited to the auditor.  Some clients may already
+share this information to a third party, for example, when using a
+server to synchronize browser history across devices in a
+server-visible way, or when doing DNS lookups through a trusted DNS
+resolver.  For clients with such a relationship already established,
+sending Feedback to the same organization does not appear to leak any
+additional information to the trusted third party.
+
+Clients who wish to contact an auditor without associating their
+identities with their Feedback may wish to use an anonymizing network
+like Tor to submit Feedback to the auditor.  Auditors SHOULD accept
+Feedback that arrives over such anonymizing networks.
+
+Clients sending feedback to an auditor may prefer to reduce the
+temporal granularity of the history leakage to the auditor by caching
+and delaying their Feedback reports.  This strategy is only as
+effective as the granularity of the timestamps embedded in the SCTs
+and STHs.
+
+### HTTPS Clients as Auditors
+
+Some HTTPS Clients may choose to act as Auditors themselves.  A Client
+taking on this role needs to consider the following:
+
+- an Auditing HTTPS Client potentially leaks their history to the logs
+  that they query.  Querying the log through a cache or a proxy with
+  many other users may avoid this leakage, but may leak information to
+  the cache or proxy, in the same way that an non-Auditing HTTPS
+  Client leaks information to a trusted Auditor.
+
+- an effective Auditor needs a strategy about what to do in the event
+  that it discovers misbehavior from a log.  Misbehavior from a log
+  involves the log being unable to provide either (a) a consistency
+  proof between two valid STHs or (b) an inclusion proof between an
+  SCT and an STH any time after the log's MMD has elapsed from the
+  issuance of the SCT.  The log's inability to provide either proof
+  will not be externally cryptographically-verifiable, as it may be
+  indistinguishable from a network error.
+
 # IANA considerations
 
 TBD
