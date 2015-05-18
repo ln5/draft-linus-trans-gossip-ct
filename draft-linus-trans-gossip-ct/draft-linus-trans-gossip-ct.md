@@ -24,12 +24,15 @@ normative:
 
 --- abstract
 
-This document describes two gossiping mechanisms for Certificate
-Transparency {{!RFC6962}}; Feedback and STH gossip. In order for
-HTTPS clients to share SCTs and STHs with CT auditors in a privacy-preserving
-manner they send SCTs and STHs to originating HTTP servers which in turn share
-them with CT auditors. CT auditors and monitors share STHs among
-each other.
+This document describes three gossiping mechanisms for Certificate
+Transparency {{!RFC6962}}; Feedback, STH pollination and STH
+sharing. In order for HTTPS clients to share SCTs with CT auditors in
+a privacy-preserving manner they send SCTs to originating HTTPS
+servers which in turn share them with CT auditors. HTTPS servers also
+act as STH pools, accepting STHs from and sending STHs to HTTPS
+clients in the hope that they will find their way to auditors and
+monitors not connected, directly nor indirectly, to the HTTPS
+server. CT auditors and monitors share STHs among each other.
 
 --- middle
 
@@ -55,7 +58,9 @@ Disseminating known information about a log poses a potential threat
 to the privacy of end users. Gossiping about data which is linkable to
 a specific log entry and by that to a specific site has to take
 privacy considerations into account in order not to leak sensitive
-information.
+information. Sharing STHs can be problematic even if they don't link
+to a specific log entry -- tracking by fingerprinting through rare
+STHs is one potential attack.
 
 However, there is no loss in privacy if a client sends SCTs for a
 given site to the site named in the SCT, since the site's access logs
@@ -63,6 +68,12 @@ would already indicate that the client is accessing that site. In this
 way a site can accumulate records of SCTs that have been issued by
 various logs for that site, providing a consolidated repository of
 SCTs which can be queried by auditors.
+
+Sharing an STH is considered reasonably safe from a privacy
+perspective as long as the same STH is shared by a large number of
+other clients. This is solved by requiring a certain freshness for
+STHs in order to be accepted and limiting the log STH issuing
+frequency.
 
 # Terminology
 
@@ -74,34 +85,37 @@ CtExtensions, SCT signature, Merkle Tree Hash.
 
 - HTTPS clients and servers (Feedback)
 - HTTPS servers and CT auditors (Feedback)
-- CT auditors and monitors (STH gossip)
+- CT auditors and monitors (STH sharing)
 
 # What to gossip about and how {#whathow}
 
-There are two separate gossip streams:
+There are three separate gossip streams:
 
-- Feedback, transporting SCTs and STHs from clients to auditors
-- STH gossip, sharing STHs between auditors/monitors
+- Feedback, transporting SCTs and certificate chains from HTTPS
+  clients to auditors
+- STH pollination, HTTPS clients using HTTPS servers as STH pools for
+  getting STHs to auditors and monitors
+- STH sharing, auditors and monitors sharing STHs among each other
 
 ## Feedback
 
-The goal of Feedback is for clients to share SCTs, certificate chains,
-and STHs with CT auditors and monitors in a privacy-preserving manner.
+The goal of Feedback is for clients to share SCTs and certificate
+chains with CT auditors and monitors in a privacy-preserving manner.
 
-HTTPS clients store SCTs, certificate chains, and STHs they see and later
+HTTPS clients store SCTs and certificate chains they see and later
 send them to originating HTTPS servers by posting them to a
 .well-known URL. This is described in {{feedback-clisrv}}. Note
-that clients send the same SCTs, chains, and STHs to servers multiple times
+that clients send the same SCTs and chains to servers multiple times
 with the assumption that a potential man-in-the-middle attack
 eventually will cease so that an honest server will receive collected
-malicious SCTs, chains, and STHs.
+malicious SCTs and chains.
 
-HTTPS servers store SCTs, certificate chains, and STHs received from clients
+HTTPS servers store SCTs and certificate chains received from clients
 and later share them with CT auditors by either posting them or making
 them available on a .well-known URL. This is described in
 {{feedback-srvaud}}.
 
-HTTPS clients MAY send SCTs, cert chains, and STHs directly to auditors. Note
+HTTPS clients MAY send SCTs and cert chains directly to auditors. Note
 that there are privacy implications of doing so, outlined in
 {{privacy-SCT}}.
 
@@ -112,10 +126,6 @@ client receives a set of SCTs as part of the TLS handshake. The
 client MUST discard SCTs that are not signed by a known log and
 SHOULD store the remaining SCTs together with the corresponding
 certificate chain for later retrieval.
-
-An HTTPS client may also acquire STHs by asking its supported logs for
-the current STH directly, or via some other (currently unspecified)
-mechanism.
 
 When the client later reconnects to any HTTPS server for the same
 domain it again receives a set of SCTs. The client MUST update its
@@ -168,7 +178,7 @@ or by HTTPS POSTing them to a number of preconfigured auditors.
 The data received in a GET of the well-known URL or sent in the POST
 is defined in {{feedback-dataformat}}.
 
-HTTPS servers SHOULD share all SCTs, certificate data, and STHs they see
+HTTPS servers SHOULD share all SCTs and certificate data they see
 that pass the checks above, but MAY as an optimisation choose to not
 share SCTs that the operator consider legitimate. An example of a
 legitimate SCT might be one that was received from a CA as part of
@@ -246,17 +256,29 @@ with the following content:
 The 'x509_chain' element MUST contain at least the leaf certificate
 and SHOULD contain the full chain to a known root.
 
-## STH gossip
+## STH pollination
 
-The goal of gossiping about STHs is to detect logs that are
+
+XXX TODO: describe STH pools and pollination
+
+
+An HTTPS client may also acquire STHs by asking its supported logs for
+the current STH directly, or via some other (currently unspecified)
+mechanism.
+
+
+
+## STH sharing
+
+The goal of STH sharing is to detect logs that are
 presenting different (inconsistent) views of the log to different
-parties. CT auditors and monitors SHOULD gossip about Signed Tree
+parties. CT auditors and monitors SHOULD share Signed Tree
 Heads (STHs) with as many other auditors and monitors as possible.
 
-\[TBD gossip about inclusion proofs and consistency proofs too?\]
+\[TBD share inclusion proofs and consistency proofs too?\]
 
-Which STHs to share and how often gossip should happen is regarded as
-policy and out of scope for this document.
+Which STHs to share and how often happen is regarded as policy and out
+of scope for this document.
 
 Auditors and monitors SHOULD provide the following URL accepting GET
 requests returning STHs:
