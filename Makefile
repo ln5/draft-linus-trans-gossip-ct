@@ -19,4 +19,4 @@ $(HTML): $(DOC).xml
 	xml2rfc $< --html
 
 clean:
-	rm -f $(DOC).html $(DOC).txt
+	rm -f $(DOC).html $(DOC).txt $(DOC).xml
