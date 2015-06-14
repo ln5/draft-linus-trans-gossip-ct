@@ -168,12 +168,12 @@ An HTTPS client connects to an HTTPS server for a particular
 domain. The client receives a set of SCTs as part of the TLS
 handshake. The client MUST discard SCTs that are not signed by a known
 log and SHOULD store the remaining SCTs together with the
-corresponding certificate chain for later retrieval.
+corresponding certificate chain for later use in feedback.
 
 When the client later reconnects to any HTTPS server for the same
 domain it again receives a set of SCTs. The client MUST update its
 store of SCTs for the domain and MUST send to the server the ones in
-its store that were not received from that server.
+the store that were not received from that server.
 
 Note that the SCT store also contains SCTs received in certificates.
 
@@ -197,8 +197,8 @@ The data sent in the POST is defined in {{feedback-dataformat}}.
 HTTPS servers perform a number of sanity checks on SCTs from clients
 before storing them:
 
-  1. if a bit-wise compare of the SCT matches one already in the
-  store, the SCT MAY be discarded
+  1. if a bit-wise compare of an SCT plus chain matches a pair already
+  in the store, this SCT and chain pair MAY be discarded
 
   1. if the SCT can't be verified to be a valid SCT for the
   accompanying leaf cert, issued by a known log, the SCT MUST be
@@ -207,10 +207,16 @@ before storing them:
   1. if the leaf cert is not for a domain that the server is
   authoritative for, the SCT MUST be discarded
 
-Check number 1 is a pure optimisation. Check number 2 is to prevent
-spamming and attacks where an adversary can fill up the store prior to
-attacking a client. Check number 3 is to help misbehaving clients from
-leaking what sites they visit.
+Check number 1 is for detecting duplicates. It's important to note
+that the check must be on pairs of SCT and chain in order to catch
+different chains accompanied by the same SCT.
+\[XXX why is this important?\]
+
+Check number 2 is to prevent spamming and attacks where an adversary
+can fill up the store prior to attacking a client.
+
+Check number 3 is to help misbehaving clients from leaking what sites
+they visit.
 
 ### HTTPS server to auditors {#feedback-srvaud}
 
