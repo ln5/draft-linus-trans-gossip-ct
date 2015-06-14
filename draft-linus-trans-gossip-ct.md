@@ -421,6 +421,11 @@ requiring that logs i) MUST return the same SCT for a given cert chain
 ({{!RFC6962}} Section 3) and ii) use a deterministic signature scheme
 when signing the SCT ({{!RFC6962}} Section 2.1.4).
 
+There is another similar fingerprinting attack where an HTTPS server
+tracks a client by using a variation of cert chains. The risk for this
+attack is accepted on the same grounds as the unique SCT attack
+described above. \[XXX any mitigations possible here?\]
+
 ### Privacy for HTTPS clients requesting STHs
 
 An HTTPS client that does not act as an auditor should only request an
