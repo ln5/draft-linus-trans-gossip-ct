@@ -183,6 +183,10 @@ often than TBD.
 An SCT MUST NOT be sent to any other HTTPS server than one serving the
 domain that the certificate signed by the SCT refers to.
 
+If the HTTPS client has configuration options for not sending cookies
+to third parties, SCTs MUST be treated as cookies with respect to this
+setting.
+
 SCTs and corresponding certificates are POSTed to the originating
 HTTPS server at the well-known URL:
 
