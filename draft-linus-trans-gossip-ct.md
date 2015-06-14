@@ -439,18 +439,19 @@ fingerprinting attack described in {{privacy-feedback}}, but it is
 mitigated by the following factors:
 
 - the relationship between auditors and logs is not sensitive in the
-  way that the relationship between clients and servers is;
+  way that the relationship between HTTPS clients and HTTPS servers
+  is;
 
 - because auditors regularly exchange STHs with each other, the
   re-appearance of a targeted STH from some auditor does not imply
-  that the auditor was the original one targeted by the log.
+  that the auditor was the original one targeted by the log;
 
-- An HTTPS client's relationship to a log is not sensitive in the way
-  that its relationship to a server is. As long as the client does not
-  query the log for more than individual STHs, the client should not
-  leak anything else to the log itself. However, a collaborating log
-  and server could use this technique to fingerprint a targeted HTTPS
-  client.
+- an HTTPS client's relationship to a log is not sensitive in the way
+  that its relationship to an HTTPS server is. As long as the client
+  does not query the log for more than individual STHs, the client
+  should not leak anything else to the log itself. However, a log and
+  an HTTPS server which are collaborating could use this technique to
+  fingerprint a targeted HTTPS client.
 
 Note that an HTTPS client in the configuration described in this
 document doesn't make direct use of the STH itself. Its fetching of
