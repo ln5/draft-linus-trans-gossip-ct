@@ -552,7 +552,7 @@ TBD
 
 The authors would like to thank the following contributors for
 valuable suggestions: Ben Laurie, Benjamin Kaduk, Magnus Ahltorp, Tom
-Ritter.
+Ritter, Yan Zhu.
 
 # ChangeLog
 
