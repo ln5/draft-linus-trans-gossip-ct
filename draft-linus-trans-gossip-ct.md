@@ -33,13 +33,13 @@ privacy-preserving manner by sending SCTs to originating HTTPS servers
 which in turn share them with CT auditors.
 
 In STH Pollination, HTTPS clients use HTTPS servers as STH pools
-sharing STH's with connecting clients in the hope that they will find
+sharing STHs with connecting clients in the hope that STHs will find
 their way to auditors and monitors.
 
 HTTPS clients in a Trusted Auditor Relationship share SCTs and STHs
-with trusted auditing or monitoring entities directly with
-expectations of privacy sensitive data being handled according to
-whatever privacy policy agreed on between client and trusted party.
+with trusted auditor or monitors directly with expectations of privacy
+sensitive data being handled according to whatever privacy policy
+agreed on between client and trusted party.
 
 --- middle
 
@@ -88,36 +88,39 @@ This document relies on terminology and data structures defined in
 CtExtensions, SCT signature, Merkle Tree Hash.
 
 ~~~~
-   -- Cert ---- +----------+
-   |            |    CA    | -----------
-   |   - SCT -> +----------+           |
+   +- Cert ---- +----------+
+   |            |    CA    | ----------+
+   |   + SCT -> +----------+           |
    v   |                          Cert & SCT
 +----------+                           |
 |   Log    |                           |
 +----------+                           v
   |  ^                          +----------+
   |  |          SCT & cert ---- | Website  |
-  |  |              |           +----------+
-  |  | [1]         STH            ^    |
-  |  | [2]          v             |    |
-  |  | [3]      +----------+      |    |
-  |  |          | Auditor  |      |  HTTPS traffic
-  |  ---------> +----------+      |    |
-  |                              STH   |
-Log entries                       |    |
-  |                               |    |
-  v                        SCT & cert  |
-+----------+                      |    v
-| Monitor  |                   +----------+
-+----------+                   | Browser  |
-                               +----------+
+  |  |[1]           |           +----------+
+  |  |[2]          STH            ^     |
+  |  |[3]           v             |     |
+  |  |          +----------+      |     |
+  |  +--------> | Auditor  |      |  HTTPS traffic
+  |             +----------+      |     |
+  |             /    ^            |     |
+  |            /      \     SCT & cert  |
+Log entries   /        \          |     |
+  |          /      (Trusted     STH   STH
+  v         /[4]      Auditor     |     |
++----------+           Stream)    |     v
+| Monitor  |               \    +----------+
++----------+                +---| Browser  |
+                                +----------+
 
-[1] get-sth: output = STH
-[2] get-proof-by-hash: input = leaf hash, tree size;
-                       output = entry index, inclusion proof
-[3] get-sth-consistency: input = tree size 1, tree size 2;
-                         output = consistency proof
-
+*   Auditor                        Log
+[1] |--- get-sth ------------------->|
+    |<-- STH ------------------------|
+[2] |--- leaf hash + tree size ----->|
+    |<-- index + inclusion proof --->|
+[3] |--- tree size 1 + tree size 2 ->|
+    |<-- consistency proof ----------|
+[4] SCT, cert and STH among multiple Auditors and Monitors
 ~~~~
 
 # Who should gossip {#who}
@@ -125,19 +128,21 @@ Log entries                       |    |
 - HTTPS clients and servers (SCT Feedback and STH Pollination)
 - HTTPS servers and CT auditors (SCT Feedback)
 - HTTPS clients and CT auditors (Trusted Auditor Relationship)
+- CT auditors and monitors (Trusted Auditor Relationship)
 
 # What to gossip about and how {#whathow}
 
 There are three separate gossip streams:
 
 - SCT Feedback, transporting SCTs and certificate chains from HTTPS
-  clients to CT auditors/monitors via HTTPS servers
+  clients to CT auditors/monitors via HTTPS servers.
 
 - STH Pollination, HTTPS clients and CT auditors/monitors using HTTPS
-  servers as STH pools for exchanging STHs
+  servers as STH pools for exchanging STHs.
 
 - Trusted Auditor Stream, HTTPS clients communicating directly with
-  trusted CT auditors/monitors
+  trusted CT auditors/monitors sharing SCTs, certificate chains and
+  STHs.
 
 ## SCT Feedback
 
@@ -223,11 +228,6 @@ legitimate SCT might be one that was received from a CA as part of
 acquisition of a certificate. Another example is an SCT received
 directly from a CT log when submitting a certificate chain.
 
-\[ XXX TBD if a server chooses to not share an SCT that the operator
-considers legitimate, should they share the STH associated with that
-log in their collected-sct-feedback? if so, how would they do that,
-since in feedback STHs are associated with an SCT? \]
-
 HTTPS servers MUST NOT share any other data that they may learn from
 the submission of feedback by HTTP clients.
 
@@ -277,8 +277,13 @@ and SHOULD contain the full chain to a known root.
 ## STH pollination
 
 The goal of sharing Signed Tree Heads (STHs) through pollination is to
-detect logs that are presenting different (inconsistent) views of the
-log to different parties.
+share STHs between HTTPS clients and CT auditors and monitors in a
+privacy-preserving manner.
+
+HTTPS servers supporting the protocol act as STH pools. HTTPS clients
+and others in the possesion of STHs should pollinate STH pools by
+sending STHs to them. CT auditors and monitors should retrieve STHs
+from pools by downloading STHs from them.
 
 STH Pollination is carried out by sending STHs to HTTPS servers
 supporting the protocol. In the case of HTTPS clients, STHs are sent
@@ -292,25 +297,42 @@ STHs are sent by POSTing them at the .well-known URL:
 
 The data sent in the POST is defined in {{sth-pollination-dataformat}}.
 
+The response contains zero or more STHs in the same format, described
+in {{sth-pollination-dataformat}}.
+
+An HTTPS client may acquire STHs by several methods:
+
+- in replies to pollination POSTs;
+- asking its supported logs for the current STH directly;
+- via some other (currently unspecified) mechanism.
+
 HTTPS clients which have STHs and CT auditors and monitors SHOULD
-pollinate HTTPS servers with STHs. Which STHs to send and how often
+pollinate STH pools with STHs. Which STHs to send and how often
 pollination should happen is regarded as policy and out of scope for
 this document.
 
+In order to avoid being tracked by an attacker controlling an STH
+pool, HTTPS clients silently ignore STHs which are not fresh. An STH
+is considered fresh iff its timestamp is less than 14 days in the
+past. Given a maximum STH issuance rate of one per hour, an attacker
+has 336 unique STHs per log for tracking. Even when multiplied by the
+number of logs that a client accepts STHs for, this number of unique
+STHs seems to stay small enough for the risk of a successful
+fingerprinting attack through STHs to be acceptable.
+
+\[TBD urge HTTPS clients to store STHs retrieved in responses?\]
+
 \[TBD share inclusion proofs and consistency proofs too?\]
 
-An HTTPS client may acquire STHs by asking its supported logs for the
-current STH directly, or via some other (currently unspecified)
-mechanism.
 
 ### STH Pollination data format {#sth-pollination-dataformat}
 
 The data sent from HTTPS clients and CT monitors and auditors to HTTPS
 servers is a JSON object {{!RFC7159}} with the following content:
 
-- sths -- an array of 0 or more fresh STH objects recently collected
-  from the log associated with log_id. Each of these objects consists
-  of
+- sths -- an array of 0 or more fresh STH objects
+  \[XXX recently collected\] from the log associated with log_id. Each
+  of these objects consists of
 
   - sth_version: Version as defined in {{!RFC6962}} Section 3.2, as a
     number. The version of the protocol to which the sth_gossip object
@@ -331,21 +353,17 @@ servers is a JSON object {{!RFC7159}} with the following content:
   - log_id: LogID as defined in {{!RFC6962}} Section 3.2, as a base64
     encoded string.
 
-An STH is considered fresh iff TBD.
+\[XXX An STH is considered recently collected iff TBD.\]
 
-An STH is considered recently collected iff TBD.
-
-## Trusted Auditor
+## Trusted Auditor Stream
 
 HTTPS clients MAY send SCTs and cert chains as well as STHs directly
 to auditors. Note that there are privacy implications of doing so,
 outlined in {{privacy-SCT}} and {{privacy-trusted-auditors}}.
 
-FIXME: add more
-
 ### Trusted Auditor data format
 
-TBD specify something here or leave this for others?
+\[TBD specify something here or leave this for others?\]
 
 
 # Security considerations
@@ -382,7 +400,7 @@ multiple other SCTs learned through submissions from multiple other
 clients. The details of mixing SCTs are TBD.
 
 There is a possible fingerprinting attack where a log issues a unique
-SCT for targeted log client(s).  A colluding log and HTTPS server
+SCT for targeted log client(s). A colluding log and HTTPS server
 operator could therefore be a threat to the privacy of an HTTPS
 client. Given all the other opportunities for HTTPS servers to
 fingerprint clients -- TLS session tickets, HPKP and HSTS headers,
@@ -396,7 +414,7 @@ when signing the SCT ({{!RFC6962}} Section 2.1.4).
 ### Privacy for HTTPS clients requesting STHs
 
 An HTTPS client that does not act as an auditor should only request an
-STH from a CT log that it accepts SCTs from.  An HTTPS client should
+STH from a CT log that it accepts SCTs from. An HTTPS client should
 regularly request an STH from all logs it is willing to accept, even
 if it has seen no SCTs from that log.
 
@@ -428,61 +446,60 @@ mitigated by the following factors:
   that the auditor was the original one targeted by the log.
 
 - An HTTPS client's relationship to a log is not sensitive in the way
-  that its relationship to a server is.  As long as the client does
-  not query the log for more than individual STHs, the client should
-  not leak anything else to the log itself.  However, a collaborating
-  log and server could use this technique to fingerprint a targeted
-  HTTPS client.
+  that its relationship to a server is. As long as the client does not
+  query the log for more than individual STHs, the client should not
+  leak anything else to the log itself. However, a collaborating log
+  and server could use this technique to fingerprint a targeted HTTPS
+  client.
 
-FIXME: still valid? Note that an HTTPS client in the configuration
-described in this document doesn't make direct use of the STH itself.
-Its fetching of the STH and reporting via SCT Feedback provides a
-benefit to the CT ecosystem as a whole by providing oversight on logs,
-but the HTTPS client itself will not necessarily derive direct
-benefit.
+Note that an HTTPS client in the configuration described in this
+document doesn't make direct use of the STH itself. Its fetching of
+the STH and reporting via STH Pollination provides a benefit to the CT
+ecosystem as a whole by providing oversight on logs, but the HTTPS
+client itself will not necessarily derive direct benefit.
 
 ### Trusted Auditors for HTTPS Clients {#privacy-trusted-auditors}
 
-Some HTTPS clients may choose to use a trusted auditor.  This trust
+Some HTTPS clients may choose to use a trusted auditor. This trust
 relationship leaks a certain amount of information from the client to
-the auditor.  In particular, it is likely to identify the web sites
-that the client has visited to the auditor.  Some clients may already
+the auditor. In particular, it is likely to identify the web sites
+that the client has visited to the auditor. Some clients may already
 share this information to a third party, for example, when using a
 server to synchronize browser history across devices in a
 server-visible way, or when doing DNS lookups through a trusted DNS
-resolver.  For clients with such a relationship already established,
+resolver. For clients with such a relationship already established,
 sending SCT Feedback to the same organization does not appear to leak
 any additional information to the trusted third party.
 
 Clients who wish to contact an auditor without associating their
 identities with their SCT Feedback may wish to use an anonymizing
-network like Tor to submit SCT Feedback to the auditor.  Auditors
+network like Tor to submit SCT Feedback to the auditor. Auditors
 SHOULD accept SCT Feedback that arrives over such anonymizing
 networks.
 
 Clients sending feedback to an auditor may prefer to reduce the
 temporal granularity of the history leakage to the auditor by caching
-and delaying their SCT Feedback reports.  This strategy is only as
+and delaying their SCT Feedback reports. This strategy is only as
 effective as the granularity of the timestamps embedded in the SCTs
 and STHs.
 
 ### HTTPS Clients as Auditors
 
-Some HTTPS Clients may choose to act as Auditors themselves.  A Client
+Some HTTPS Clients may choose to act as Auditors themselves. A Client
 taking on this role needs to consider the following:
 
 - an Auditing HTTPS Client potentially leaks their history to the logs
-  that they query.  Querying the log through a cache or a proxy with
+  that they query. Querying the log through a cache or a proxy with
   many other users may avoid this leakage, but may leak information to
   the cache or proxy, in the same way that an non-Auditing HTTPS
   Client leaks information to a trusted Auditor.
 
 - an effective Auditor needs a strategy about what to do in the event
-  that it discovers misbehavior from a log.  Misbehavior from a log
+  that it discovers misbehavior from a log. Misbehavior from a log
   involves the log being unable to provide either (a) a consistency
   proof between two valid STHs or (b) an inclusion proof between an
   SCT and an STH any time after the log's MMD has elapsed from the
-  issuance of the SCT.  The log's inability to provide either proof
+  issuance of the SCT. The log's inability to provide either proof
   will not be externally cryptographically-verifiable, as it may be
   indistinguishable from a network error.
 
@@ -492,8 +509,9 @@ TBD
 
 # Contributors
 
-The authors would like to thank Tom Ritter, Magnus Ahltorp and
-Benjamin Kaduk for valuable contributions.
+The authors would like to thank the following contributors for
+valuable suggestions: Ben Laurie, Benjamin Kaduk, Magnus Ahltorp, Tom
+Ritter.
 
 # ChangeLog
 
