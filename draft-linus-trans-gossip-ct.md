@@ -232,11 +232,13 @@ The data received in a GET of the well-known URL or sent in the POST
 is defined in {{feedback-dataformat}}.
 
 HTTPS servers SHOULD share all SCTs and certificate data they see that
-pass the checks above, but MAY as an optimisation choose to not share
-SCTs that the operator considers legitimate. An example of a
-legitimate SCT might be one that was received from a CA as part of
-acquisition of a certificate. Another example is an SCT received
-directly from a CT log when submitting a certificate chain.
+pass the checks in {{feedback-clisrv}}, but MAY as an optimisation
+choose to not share SCTs that the operator considers legitimate. An
+example of a legitimate SCT might be one that was received from a CA
+as part of acquisition of a certificate. Another example is an SCT
+received directly from a CT log when submitting a certificate
+chain. In order for an SCT to be considered legitimate it SHOULD be
+validated through an inclusion proof to a valid STH.
 
 HTTPS servers MUST NOT share any other data that they may learn from
 the submission of feedback by HTTP clients.
