@@ -371,6 +371,31 @@ HTTPS clients MAY send SCTs and cert chains as well as STHs directly
 to auditors. Note that there are privacy implications of doing so,
 outlined in {{privacy-SCT}} and {{privacy-trusted-auditors}}.
 
+The most natural trusted auditor arrangement arguably is a web browser
+that is "logged in to" a provider of various internet
+services. Another equivalent arrangement is a trusted party like a
+corporation which an employer is connected to through a VPN or by
+other similar means. A third might be individuals or smaller groups of
+people running their own services. In such a setting, retrieving STHs
+and inclusion proofs from that third party in order to validate SCTs
+could be considered reasonable from a privacy perspective. The HTTPS
+client does its own auditing and might additionally share SCTs and
+STHs with the trusted party to contribute to herd immunity. Here, the
+ordinary {{!RFC6962}} protocol is sufficient for the client to do the
+auditing while SCT Feedback and STH Pollination can be used in whole
+or in parts for the gossip part.
+
+Another well established trusted party arrangment on the internet
+today is the relation between internet users and their providers of
+DNS resolver services. DNS resolvers are typically provided by the
+internet service provider (ISP) used, which by the nature of name
+resolving already know a great deal about what sites their users
+visit. In order for HTTPS clients to be able to retrieve inclusion
+proofs for SCTs that they want to verify, logs could expose a DNS
+interface in addition to the ordinary HTTPS interface. An informal
+writeup of such a protocol can be found at XXX.
+
+
 ### Trusted Auditor data format
 
 \[TBD specify something here or leave this for others?\]
