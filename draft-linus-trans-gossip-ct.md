@@ -249,10 +249,10 @@ SCT feedback data:
     https://\<auditor\>/ct/v1/sct-feedback
 
 Auditors SHOULD regularly poll HTTPS servers at the well-known
-collected-sct-feedback URL. How to determine which domains to poll is
-outside the scope of this document but the selection MUST NOT be
-influenced by potential HTTPS clients connecting directly to the
-auditor.
+collected-sct-feedback URL. The frequency of the polling and how to
+determine which domains to poll is outside the scope of this
+document. The selection MUST NOT be influenced by potential HTTPS
+clients connecting directly to the auditor.
 
 ### SCT Feedback data format {#feedback-dataformat}
 
