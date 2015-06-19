@@ -553,8 +553,8 @@ TBD
 # Contributors
 
 The authors would like to thank the following contributors for
-valuable suggestions: Ben Laurie, Benjamin Kaduk, Magnus Ahltorp, Tom
-Ritter, Yan Zhu.
+valuable suggestions: Ben Laurie, Benjamin Kaduk, Karen Seo, Magnus
+Ahltorp, Tom Ritter, Yan Zhu.
 
 # ChangeLog
 
