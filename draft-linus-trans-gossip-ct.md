@@ -509,11 +509,6 @@ STH from a CT log that it accepts SCTs from. An HTTPS client should
 regularly request an STH from all logs it is willing to accept, even
 if it has seen no SCTs from that log.
 
-[[
-tjr: I kind of put this already up in Client STH Fetching, but those points 
-should be repeated
-]]
-
 ### Privacy in STH Pollination
 
 An STH linked to an HTTPS client may indicate the following about that
