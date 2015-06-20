@@ -110,11 +110,11 @@ show what goes in the Trusted Auditor Relationship stream.
   |  |          +----------+      |     |
   |  +--------> | Auditor  |      |  HTTPS traffic
   |             +----------+      |     |
-  |             /                 |     |
+  |             /                 |    SCT
   |            /            SCT & Cert  |
-Log entries   /                   |    SCT
-  |          /                   STH    &
-  v         /[4]                  |    STH
+Log entries   /                   |     |
+  |          /                   STH   STH
+  v         /[4]                  |     |
 +----------+                      |     v
 | Monitor  |                    +----------+
 +----------+                    | Browser  |
