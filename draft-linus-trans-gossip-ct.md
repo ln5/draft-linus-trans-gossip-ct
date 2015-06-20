@@ -334,8 +334,9 @@ An HTTPS client could be tracked by giving it a unique or rare STH.
 To address this concern, we place restrictions on different components
 of the system to ensure an STH will not be rare.
 
-- Logs cannot issue STHs too frequently. This is restricted to 1 per \[TBD\]
-- HTTPS clients silently ignore STHs which are not fresh
+- Logs cannot issue STHs too frequently. This is restricted to 1 per
+  hour.
+- HTTPS clients silently ignore STHs which are not fresh.
 
 An STH is considered fresh iff its timestamp is less than 14 days in the
 past. Given a maximum STH issuance rate of one per hour, an attacker
