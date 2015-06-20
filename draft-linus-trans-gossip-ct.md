@@ -609,7 +609,7 @@ Ahltorp, Tom Ritter, Yan Zhu.
 
 ## Changes between -01 and -02
 
-- Add STH Pollination.
+- Add STH Pollination and Trusted Auditor Relationship.
 
 ## Changes between -00 and -01
 
