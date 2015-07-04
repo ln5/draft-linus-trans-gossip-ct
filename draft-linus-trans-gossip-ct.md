@@ -222,14 +222,14 @@ log and SHOULD store the remaining SCTs together with the
 corresponding certificate chain for later use in feedback.
 
 When the client later reconnects to any HTTPS server for the same
-domain it again receives a set of SCTs. The client MUST update its
-store of SCTs for the domain and MUST send to the server the ones in
-the store that were not received from that server.
+domain it again receives a set of SCTs. The client MUST add the new
+SCTs to its store of SCTs for the server and MUST send to the server
+the ones in the store that were not received from that server.
 
 Note that the SCT store also contains SCTs received in certificates.
 
 The client MUST NOT send the same set of SCTs to the same server more
-often than TBD.
+often than TBD. \[ explain why: is this just rate/resource limiting? \]
 
 An SCT MUST NOT be sent to any other HTTPS server than one serving the
 domain that the certificate signed by the SCT refers to. This would
