@@ -22,6 +22,7 @@ author:
 
 normative:
   RFC6962:
+  RFC7159:
 
 informative:
   THREAT-ANALYSIS:
@@ -126,7 +127,7 @@ frequency by which logs can issue STHs.
 # Terminology and data flow
 
 This document relies on terminology and data structures defined in
-{{!RFC6962}}, including STH, SCT, Version, LogID, SCT timestamp,
+{{RFC6962}}, including STH, SCT, Version, LogID, SCT timestamp,
 CtExtensions, SCT signature, Merkle Tree Hash.
 
 The following picture shows how certificates, SCTs and STHs flow
@@ -318,7 +319,7 @@ information provided by the clients.
 ### SCT Feedback data format {#feedback-dataformat}
 
 The data shared between HTTPS clients and servers as well as between
-HTTPS servers and CT auditors/monitors is a JSON object {{!RFC7159}}
+HTTPS servers and CT auditors/monitors is a JSON object {{RFC7159}}
 with the following content:
 
 - sct_feedback: An array of objects consisting of
@@ -328,7 +329,7 @@ with the following content:
     the first and so on.
 
   - sct_data: An array of objects consisting of the base64
-    representation of the binary SCT data as defined in {{!RFC6962}}
+    representation of the binary SCT data as defined in {{RFC6962}}
     Section 3.2.
 
 The 'x509_chain' element MUST contain at the leaf certificate and the
@@ -432,29 +433,29 @@ continues to be tracked in the system.
 ### STH Pollination data format {#sth-pollination-dataformat}
 
 The data sent from HTTPS clients and CT monitors and auditors to HTTPS
-servers is a JSON object {{!RFC7159}} with the following content:
+servers is a JSON object {{RFC7159}} with the following content:
 
 - sths -- an array of 0 or more fresh STH objects
   \[XXX recently collected\] from the log associated with log_id. Each
   of these objects consists of
 
-  - sth_version: Version as defined in {{!RFC6962}} Section 3.2, as a
+  - sth_version: Version as defined in {{RFC6962}} Section 3.2, as a
     number. The version of the protocol to which the sth_gossip object
     conforms.
 
   - tree_size: The size of the tree, in entries, as a number.
 
-  - timestamp: The timestamp of the STH as defined in {{!RFC6962}}
+  - timestamp: The timestamp of the STH as defined in {{RFC6962}}
     Section 3.2, as a number.
 
   - sha256_root_hash: The Merkle Tree Hash of the tree as defined in
-    {{!RFC6962}} Section 2.1, as a base64 encoded string.
+    {{RFC6962}} Section 2.1, as a base64 encoded string.
 
   - tree_head_signature: A TreeHeadSignature as defined in
-    {{!RFC6962}} Section 3.5 for the above data, as a base64 encoded
+    {{RFC6962}} Section 3.5 for the above data, as a base64 encoded
     string.
 
-  - log_id: LogID as defined in {{!RFC6962}} Section 3.2, as a base64
+  - log_id: LogID as defined in {{RFC6962}} Section 3.2, as a base64
     encoded string.
 
 \[XXX An STH is considered recently collected iff TBD.\]
@@ -475,7 +476,7 @@ and inclusion proofs from that third party in order to validate SCTs
 could be considered reasonable from a privacy perspective. The HTTPS
 client does its own auditing and might additionally share SCTs and
 STHs with the trusted party to contribute to herd immunity. Here, the
-ordinary {{!RFC6962}} protocol is sufficient for the client to do the
+ordinary {{RFC6962}} protocol is sufficient for the client to do the
 auditing while SCT Feedback and STH Pollination can be used in whole
 or in parts for the gossip part.
 
@@ -538,8 +539,8 @@ HTTP Cookies, etc. -- this is acceptable.
 
 The fingerprinting attack described above could be avoided by
 requiring that logs i) MUST return the same SCT for a given cert chain
-({{!RFC6962}} Section 3) and ii) use a deterministic signature scheme
-when signing the SCT ({{!RFC6962}} Section 2.1.4).
+({{RFC6962}} Section 3) and ii) use a deterministic signature scheme
+when signing the SCT ({{RFC6962}} Section 2.1.4).
 
 There is another similar fingerprinting attack where an HTTPS server
 tracks a client by using a variation of cert chains. The risk for this
