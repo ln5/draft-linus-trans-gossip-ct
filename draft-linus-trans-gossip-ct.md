@@ -142,7 +142,7 @@ show what goes in the Trusted Auditor Relationship stream.
 |   Log    | ---------- SCT -----------+
 +----------+                           v
   |  ^                          +----------+
-  |  |          SCT & Cert ---- | Website  |
+  |  |          SCT & Certs --- | Website  |
   |  |[1]           |           +----------+
   |  |[2]          STH            ^     |
   |  |[3]           v             |     |
@@ -150,7 +150,7 @@ show what goes in the Trusted Auditor Relationship stream.
   |  +--------> | Auditor  |      |  HTTPS traffic
   |             +----------+      |     |
   |             /                 |    SCT
-  |            /            SCT & Cert  |
+  |            /            SCT & Certs |
 Log entries   /                   |     |
   |          /                   STH   STH
   v         /[4]                  |     |
