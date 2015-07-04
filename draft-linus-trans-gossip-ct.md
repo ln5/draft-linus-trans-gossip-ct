@@ -169,12 +169,16 @@ Log entries   /                   |     |
 [4] SCT, cert and STH among multiple Auditors and Monitors
 ~~~~
 
-# Who should gossip {#who}
+# Who gossips {#who}
 
 - HTTPS clients and servers (SCT Feedback and STH Pollination)
 - HTTPS servers and CT auditors (SCT Feedback)
-- HTTPS clients and CT auditors (Trusted Auditor Relationship)
 - CT auditors and monitors (Trusted Auditor Relationship)
+
+Additionally, some HTTPS clients may engage with an auditor who they
+trust with their privacy:
+
+- HTTPS clients and CT auditors (Trusted Auditor Relationship)
 
 # What to gossip about and how {#whathow}
 
