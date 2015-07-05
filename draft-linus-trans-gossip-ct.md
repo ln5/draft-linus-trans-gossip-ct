@@ -19,6 +19,10 @@ author:
     name: Daniel Kahn Gillmor
     email: dkg@fifthhorseman.net
     org: ACLU
+  -
+    ins: T. Ritter
+    name: Tom Ritter
+    email: tom@ritter.vg
 
 normative:
 
@@ -604,7 +608,7 @@ TBD
 
 The authors would like to thank the following contributors for
 valuable suggestions: Ben Laurie, Benjamin Kaduk, Karen Seo, Magnus
-Ahltorp, Tom Ritter, Yan Zhu.
+Ahltorp, Yan Zhu.
 
 # ChangeLog
 
