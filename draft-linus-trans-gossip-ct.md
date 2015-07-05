@@ -368,11 +368,11 @@ Additionally, for this inclusion proof to be acceptable to the client,
 the inclusion proof MUST reference a STH that is within the acceptable
 freshness interval.
 
-Depending on the client's DNS provider, this mechanism may provide an
-appropriate intermediate layer that obfuscate's the linkability between
+Depending on the client's DNS provider, DNS may provide an
+appropriate intermediate layer that obfuscates the linkability between
 the user of the client and the request for inclusion
-while at the same time providing a caching layer for oft-requested
-inclusion proofs.
+(while at the same time providing a caching layer for oft-requested
+inclusion proofs.)
 
 Also Tor.
 
