@@ -25,20 +25,34 @@ author:
     email: tom@ritter.vg
 
 normative:
+  RFC6962:
+  RFC7159:
+
+informative:
+  THREAT-ANALYSIS:
+    title: "Threat Analysis for Certificate Transparency"
+    author:
+      -
+        ins: S. Kent
+        name: Stephen Kent
+    date: 2015
+    target: https://datatracker.ietf.org/doc/draft-ietf-trans-threat-analysis/
 
 --- abstract
 
 This document describes three gossiping mechanisms for Certificate
-Transparency {{!RFC6962}}; SCT Feedback, STH Pollination and Trusted
-Auditor Relationship.
+Transparency (CT) {{RFC6962}}: SCT Feedback, STH Pollination and
+Trusted Auditor Relationship.
 
-SCT Feedback enables HTTPS clients to share SCTs with CT auditors in a
+SCT Feedback enables HTTPS clients to share Signed Certificate
+Timestamps (SCTs) (Section 3.2 of {{RFC6962}}) with CT auditors in a
 privacy-preserving manner by sending SCTs to originating HTTPS servers
 which in turn share them with CT auditors.
 
-In STH Pollination, HTTPS clients use HTTPS servers as STH pools
-sharing STHs with connecting clients in the hope that STHs will find
-their way to auditors and monitors.
+In STH Pollination, HTTPS clients use HTTPS servers as pools sharing
+Signed Tree Heads (STHs) (Section 3.5 of {{RFC6962}}) with other connecting
+clients in the hope that STHs will find their way to auditors and
+monitors.
 
 HTTPS clients in a Trusted Auditor Relationship share SCTs and STHs
 with trusted auditors or monitors directly, with expectations of privacy
@@ -49,10 +63,37 @@ agreed on between client and trusted party.
 
 # Introduction
 
+The purpose of the protocols in this document is to detect misbehavior
+by CT logs.  In particular, CT logs can misbehave either by rewriting
+history or by presenting a "split view" of their operations, also
+known as a partitioning attack {{THREAT-ANALYSIS}}.  CT provides
+mechanisms for detection of these misbehaviors, but only if the
+community dependent on the log knows what to do with them.  In order
+for the community to effectively detect log misbehavior, it needs a
+well-defined way to "gossip" about the activity of the logs that makes
+use of the available mechanisms.
+
+One of the major challenges of any gossip protocol is limiting damage
+to user privacy.  The goal of CT gossip is to publish and distribute
+information about the logs and their operations, but not to leak any
+additional information about the operation of any of the other
+particpants.  Privacy of consumers of log information (in particular,
+of web browsers and other TLS clients) should not be damaged by
+gossip.
+
+This document presents three different, complementary mechanisms for
+non-log players in the CT ecosystem to exchange information about logs
+in a manner that preserves the privacy of the non-log players
+involved.  They should provide protective benefits for the system as a
+whole even if their adoption is not universal.
+
+# Overview
+
 Public append-only untrusted logs have to be monitored for
-consistency, i.e. that they should never rewrite history. Monitors and
-other log clients need to exchange information about monitored logs in
-order to be able to detect a partitioning attack.
+consistency, i.e., that they should never rewrite history.
+Additionally, monitors and other log clients need to exchange
+information about monitored logs in order to be able to detect a
+partitioning attack.
 
 A partitioning attack is when a log serves different views of the log
 to different clients. Each client would be able to verify the
@@ -65,12 +106,14 @@ attack. We want some side of the partitioned tree, and ideally both
 sides, to see the other side.
 
 Disseminating known information about a log poses a potential threat
-to the privacy of end users. Gossiping about data which is linkable to
-a specific log entry and by that to a specific site has to take
-privacy considerations into account in order not to leak sensitive
-information. Sharing STHs can be problematic even if they don't link
-to a specific log entry -- tracking by fingerprinting through rare
-STHs is one potential attack.
+to the privacy of end users. Some data of interest (e.g. SCTs) are
+linkable to specific log entries and thereby to specific sites, which
+makes them privacy-sensitive.  Gossip about this data has to take
+privacy considerations into account in order not to leak associations
+between users of the log (e.g., web browsers) and certificate holders
+(e.g., web sites). Even sharing STHs (which do not link to specific log
+entries) can be problematic -- user tracking by fingerprinting through
+rare STHs is one potential attack.
 
 However, there is no loss in privacy if a client sends SCTs for a
 given site to the site corresponding to the SCT, because the site's access logs
@@ -81,17 +124,14 @@ SCTs which can be queried by auditors.
 
 Sharing an STH is considered reasonably safe from a privacy
 perspective as long as the same STH is shared by a large number of
-other clients. This is solved by requiring a certain freshness for
-STHs in order to be accepted and limiting the log STH issuing
-frequency.
+other clients. This "safety in numbers" is achieved by requiring
+gossip only for STHs of a certain "freshness" and limiting the
+frequency by which logs can issue STHs.
 
-\[this is more of a tl;dr than an introduction
-  TODO: make this a proper introduction\]
-
-# Terminology and overview
+# Terminology and data flow
 
 This document relies on terminology and data structures defined in
-{{!RFC6962}}, including STH, SCT, Version, LogID, SCT timestamp,
+{{RFC6962}}, including STH, SCT, Version, LogID, SCT timestamp,
 CtExtensions, SCT signature, Merkle Tree Hash.
 
 The following picture shows how certificates, SCTs and STHs flow
@@ -107,7 +147,7 @@ show what goes in the Trusted Auditor Relationship stream.
 |   Log    | ---------- SCT -----------+
 +----------+                           v
   |  ^                          +----------+
-  |  |          SCT & Cert ---- | Website  |
+  |  |          SCT & Certs --- | Website  |
   |  |[1]           |           +----------+
   |  |[2]          STH            ^     |
   |  |[3]           v             |     |
@@ -115,7 +155,7 @@ show what goes in the Trusted Auditor Relationship stream.
   |  +--------> | Auditor  |      |  HTTPS traffic
   |             +----------+      |     |
   |             /                 |    SCT
-  |            /            SCT & Cert  |
+  |            /            SCT & Certs |
 Log entries   /                   |     |
   |          /                   STH   STH
   v         /[4]                  |     |
@@ -134,12 +174,16 @@ Log entries   /                   |     |
 [4] SCT, cert and STH among multiple Auditors and Monitors
 ~~~~
 
-# Who should gossip {#who}
+# Who gossips {#who}
 
 - HTTPS clients and servers (SCT Feedback and STH Pollination)
 - HTTPS servers and CT auditors (SCT Feedback)
-- HTTPS clients and CT auditors (Trusted Auditor Relationship)
 - CT auditors and monitors (Trusted Auditor Relationship)
+
+Additionally, some HTTPS clients may engage with an auditor who they
+trust with their privacy:
+
+- HTTPS clients and CT auditors (Trusted Auditor Relationship)
 
 # What to gossip about and how {#whathow}
 
@@ -182,14 +226,14 @@ log and SHOULD store the remaining SCTs together with the
 corresponding certificate chain for later use in feedback.
 
 When the client later reconnects to any HTTPS server for the same
-domain it again receives a set of SCTs. The client MUST update its
-store of SCTs for the domain and MUST send to the server the ones in
-the store that were not received from that server.
+domain it again receives a set of SCTs. The client MUST add the new
+SCTs to its store of SCTs for the server and MUST send to the server
+the ones in the store that were not received from that server.
 
 Note that the SCT store also contains SCTs received in certificates.
 
 The client MUST NOT send the same set of SCTs to the same server more
-often than TBD.
+often than TBD. \[ explain why: is this just rate/resource limiting? \]
 
 An SCT MUST NOT be sent to any other HTTPS server than one serving the
 domain that the certificate signed by the SCT refers to. This would
@@ -279,7 +323,7 @@ information provided by the clients.
 ### SCT Feedback data format {#feedback-dataformat}
 
 The data shared between HTTPS clients and servers as well as between
-HTTPS servers and CT auditors/monitors is a JSON object {{!RFC7159}}
+HTTPS servers and CT auditors/monitors is a JSON object {{RFC7159}}
 with the following content:
 
 - sct_feedback: An array of objects consisting of
@@ -289,7 +333,7 @@ with the following content:
     the first and so on.
 
   - sct_data: An array of objects consisting of the base64
-    representation of the binary SCT data as defined in {{!RFC6962}}
+    representation of the binary SCT data as defined in {{RFC6962}}
     Section 3.2.
 
 The 'x509_chain' element MUST contain at the leaf certificate and the
@@ -391,29 +435,29 @@ continues to be tracked in the system.
 ### STH Pollination data format {#sth-pollination-dataformat}
 
 The data sent from HTTPS clients and CT monitors and auditors to HTTPS
-servers is a JSON object {{!RFC7159}} with the following content:
+servers is a JSON object {{RFC7159}} with the following content:
 
 - sths -- an array of 0 or more fresh STH objects
   \[XXX recently collected\] from the log associated with log_id. Each
   of these objects consists of
 
-  - sth_version: Version as defined in {{!RFC6962}} Section 3.2, as a
+  - sth_version: Version as defined in {{RFC6962}} Section 3.2, as a
     number. The version of the protocol to which the sth_gossip object
     conforms.
 
   - tree_size: The size of the tree, in entries, as a number.
 
-  - timestamp: The timestamp of the STH as defined in {{!RFC6962}}
+  - timestamp: The timestamp of the STH as defined in {{RFC6962}}
     Section 3.2, as a number.
 
   - sha256_root_hash: The Merkle Tree Hash of the tree as defined in
-    {{!RFC6962}} Section 2.1, as a base64 encoded string.
+    {{RFC6962}} Section 2.1, as a base64 encoded string.
 
   - tree_head_signature: A TreeHeadSignature as defined in
-    {{!RFC6962}} Section 3.5 for the above data, as a base64 encoded
+    {{RFC6962}} Section 3.5 for the above data, as a base64 encoded
     string.
 
-  - log_id: LogID as defined in {{!RFC6962}} Section 3.2, as a base64
+  - log_id: LogID as defined in {{RFC6962}} Section 3.2, as a base64
     encoded string.
 
 \[XXX An STH is considered recently collected iff TBD.\]
@@ -434,7 +478,7 @@ and inclusion proofs from that third party in order to validate SCTs
 could be considered reasonable from a privacy perspective. The HTTPS
 client does its own auditing and might additionally share SCTs and
 STHs with the trusted party to contribute to herd immunity. Here, the
-ordinary {{!RFC6962}} protocol is sufficient for the client to do the
+ordinary {{RFC6962}} protocol is sufficient for the client to do the
 auditing while SCT Feedback and STH Pollination can be used in whole
 or in parts for the gossip part.
 
@@ -497,8 +541,8 @@ HTTP Cookies, etc. -- this is acceptable.
 
 The fingerprinting attack described above could be avoided by
 requiring that logs i) MUST return the same SCT for a given cert chain
-({{!RFC6962}} Section 3) and ii) use a deterministic signature scheme
-when signing the SCT ({{!RFC6962}} Section 2.1.4).
+({{RFC6962}} Section 3) and ii) use a deterministic signature scheme
+when signing the SCT ({{RFC6962}} Section 2.1.4).
 
 There is another similar fingerprinting attack where an HTTPS server
 tracks a client by using a variation of cert chains. The risk for this
