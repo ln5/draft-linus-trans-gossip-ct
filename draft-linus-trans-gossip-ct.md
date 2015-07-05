@@ -358,8 +358,6 @@ default settings in HTTPS clients.
 
 ### HTTPS client STH Fetching
 
-\[XXX this section describes how an auditing HTTPS client should get hold of inclusion proofs; does it belong in a document on gossip? \]
-
 An HTTPS client retrieves SCTs from an HTTPS server, and must obtain an inclusion
 proof to an STH in order to verify the promise made by the SCT. This retrieval mechanism reveals the
 client's browsing habits when the client requests the proof diretly from the log. To
