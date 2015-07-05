@@ -73,7 +73,7 @@ to a specific log entry -- tracking by fingerprinting through rare
 STHs is one potential attack.
 
 However, there is no loss in privacy if a client sends SCTs for a
-given site to the site named in the SCT, because the site's access logs
+given site to the site corresponding to the SCT, because the site's access logs
 would already indicate that the client is accessing that site. In this
 way a site can accumulate records of SCTs that have been issued by
 various logs for that site, providing a consolidated repository of
@@ -605,8 +605,8 @@ TBD
 # Contributors
 
 The authors would like to thank the following contributors for
-valuable suggestions: Ben Laurie, Benjamin Kaduk, Karen Seo, Magnus
-Ahltorp, Yan Zhu.
+valuable suggestions: Al Cutter, Ben Laurie, Benjamin Kaduk, Karen
+Seo, Magnus Ahltorp, Yan Zhu.
 
 # ChangeLog
 
