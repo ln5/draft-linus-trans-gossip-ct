@@ -231,7 +231,7 @@ Check number 2 is to prevent spamming attacks where an adversary
 can fill up the store prior to attacking a client, or a denial of
 service attack on the server's storage space.
 
-Check number 3 is to help misbehaving clients from leaking what sites
+Check number 3 is to help malfunctioning clients from leaking what sites
 they visit and additionally to prevent spamming attacks.
 
 Note that an HTTPS server MAY perform a certificate chain validation on
