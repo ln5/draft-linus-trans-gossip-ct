@@ -466,7 +466,7 @@ relationship-mapping or clustering of servers or of clients.
 
 ### Privacy and SCTs {#privacy-SCT}
 
-SCTs contain information that typically links it to a particular web
+SCTs contain information that links it to a particular web
 site. Because the client-server relationship is sensitive, gossip
 between clients and servers about unrelated SCTs is risky. Therefore,
 a client with an SCT for a given server should transmit that
