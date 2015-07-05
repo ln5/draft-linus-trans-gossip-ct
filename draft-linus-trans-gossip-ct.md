@@ -438,7 +438,7 @@ ordinary {{!RFC6962}} protocol is sufficient for the client to do the
 auditing while SCT Feedback and STH Pollination can be used in whole
 or in parts for the gossip part.
 
-Another well established trusted party arrangment on the internet
+Another well established trusted party arrangement on the internet
 today is the relation between internet users and their providers of
 DNS resolver services. DNS resolvers are typically provided by the
 internet service provider (ISP) used, which by the nature of name
