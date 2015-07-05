@@ -307,7 +307,7 @@ HTTPS servers SHOULD share all SCTs and accompanying certificate
 chains they see that pass the checks in {{feedback-clisrv}}.
 
 HTTPS servers MUST NOT share any other data that they may learn from
-the submission of feedback by HTTPS clients.
+the submission of SCT Feedback by HTTPS clients.
 
 Auditors SHOULD provide the following URL accepting HTTPS POSTing of
 SCT feedback data:
