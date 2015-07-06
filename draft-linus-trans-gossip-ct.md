@@ -1,6 +1,6 @@
 ---
 title: Gossiping in CT
-docname: draft-linus-trans-gossip-ct-02
+docname: draft-linus-trans-gossip-ct-03-dev
 category: exp
 pi: [toc, sortrefs, symrefs]
 ipr: trust200902
