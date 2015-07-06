@@ -252,7 +252,7 @@ setting.
 SCTs and corresponding certificates are POSTed to the originating
 HTTPS server at the well-known URL:
 
-    https://\<domain\>/.well-known/ct/v1/sct-feedback
+    https://<domain>/.well-known/ct/v1/sct-feedback
 
 The data sent in the POST is defined in {{feedback-dataformat}}.
 
@@ -296,7 +296,7 @@ HTTPS servers receiving SCTs from clients SHOULD share SCTs and
 certificate chains with CT auditors by either providing the well-known
 URL:
 
-    https://\<domain\>/.well-known/ct/v1/collected-sct-feedback
+    https://<domain>/.well-known/ct/v1/collected-sct-feedback
 
 or by HTTPS POSTing them to a number of preconfigured auditors. This
 allows an HTTPS server to choose between an active push model or a
@@ -314,7 +314,7 @@ the submission of SCT Feedback by HTTPS clients.
 Auditors SHOULD provide the following URL accepting HTTPS POSTing of
 SCT feedback data:
 
-    https://\<auditor\>/ct/v1/sct-feedback
+    https://<auditor>/ct/v1/sct-feedback
 
 Auditors SHOULD regularly poll HTTPS servers at the well-known
 collected-sct-feedback URL. The frequency of the polling and how to
@@ -363,7 +363,7 @@ secure browsing (https://).
 
 STHs are sent by POSTing them at the .well-known URL:
 
-    https://\<domain\>/.well-known/ct/v1/sth-pollination
+    https://<domain>/.well-known/ct/v1/sth-pollination
 
 The data sent in the POST is defined in {{sth-pollination-dataformat}}.
 
