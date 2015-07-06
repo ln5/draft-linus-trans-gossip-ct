@@ -50,14 +50,14 @@ privacy-preserving manner by sending SCTs to originating HTTPS servers
 which in turn share them with CT auditors.
 
 In STH Pollination, HTTPS clients use HTTPS servers as pools sharing
-Signed Tree Heads (STHs) (Section 3.5 of {{RFC6962}}) with other connecting
-clients in the hope that STHs will find their way to auditors and
-monitors.
+Signed Tree Heads (STHs) (Section 3.5 of {{RFC6962}}) with other
+connecting clients in the hope that STHs will find their way to
+auditors and monitors.
 
 HTTPS clients in a Trusted Auditor Relationship share SCTs and STHs
-with trusted auditors or monitors directly, with expectations of privacy
-sensitive data being handled according to whatever privacy policy is
-agreed on between client and trusted party.
+with trusted auditors or monitors directly, with expectations of
+privacy sensitive data being handled according to whatever privacy
+policy is agreed on between client and trusted party.
 
 --- middle
 
@@ -111,16 +111,16 @@ linkable to specific log entries and thereby to specific sites, which
 makes them privacy-sensitive.  Gossip about this data has to take
 privacy considerations into account in order not to leak associations
 between users of the log (e.g., web browsers) and certificate holders
-(e.g., web sites). Even sharing STHs (which do not link to specific log
-entries) can be problematic -- user tracking by fingerprinting through
-rare STHs is one potential attack.
+(e.g., web sites). Even sharing STHs (which do not link to specific
+log entries) can be problematic -- user tracking by fingerprinting
+through rare STHs is one potential attack.
 
 However, there is no loss in privacy if a client sends SCTs for a
-given site to the site corresponding to the SCT, because the site's access logs
-would already indicate that the client is accessing that site. In this
-way a site can accumulate records of SCTs that have been issued by
-various logs for that site, providing a consolidated repository of
-SCTs which can be queried by auditors.
+given site to the site corresponding to the SCT, because the site's
+access logs would already indicate that the client is accessing that
+site. In this way a site can accumulate records of SCTs that have been
+issued by various logs for that site, providing a consolidated
+repository of SCTs which can be queried by auditors.
 
 Sharing an STH is considered reasonably safe from a privacy
 perspective as long as the same STH is shared by a large number of
@@ -240,10 +240,11 @@ often than TBD.
 
 An SCT MUST NOT be sent to any other HTTPS server than one serving the
 domain that the certificate signed by the SCT refers to. This would
-lead to two types of privacy leaks. First, the server recieving the SCT
-would learn about other sites visited by the HTTPS client. Secondly,
-auditors or monitors recieving SCTs from the HTTPS server would learn
-information about the other HTTPS servers visited by its clients.
+lead to two types of privacy leaks. First, the server recieving the
+SCT would learn about other sites visited by the HTTPS
+client. Secondly, auditors or monitors recieving SCTs from the HTTPS
+server would learn information about the other HTTPS servers visited
+by its clients.
 
 If the HTTPS client has configuration options for not sending cookies
 to third parties, SCTs MUST be treated as cookies with respect to this
@@ -278,17 +279,16 @@ Check number 2 is to prevent spamming attacks where an adversary
 can fill up the store prior to attacking a client, or a denial of
 service attack on the server's storage space.
 
-Check number 3 is to help malfunctioning clients from leaking what sites
-they visit and additionally to prevent spamming attacks.
+Check number 3 is to help malfunctioning clients from leaking what
+sites they visit and additionally to prevent spamming attacks.
 
-Note that an HTTPS server MAY perform a certificate chain validation on
-a submitted certificate chain, and if it matches a trust root
-configured on the server (but is otherwise unknown to the server),
-the HTTPS server MAY store the certificate chain and MAY choose to
-store any submitted SCTs even if they are unable to be verified. The
-risk of spamming and denial of service can be mitigated by configuring
-the server with all known acceptable certificates (or certificate
-hashes).
+Note that an HTTPS server MAY perform a certificate chain validation
+on a submitted certificate chain, and if it matches a trust root
+configured on the server (but is otherwise unknown to the server), the
+HTTPS server MAY store the certificate chain and MAY choose to store
+any submitted SCTs even if they are unable to be verified. The risk of
+spamming and denial of service can be mitigated by configuring the
+server with all known acceptable certificates (or certificate hashes).
 
 ### HTTPS server to auditors {#feedback-srvaud}
 
@@ -319,9 +319,9 @@ SCT feedback data:
 Auditors SHOULD regularly poll HTTPS servers at the well-known
 collected-sct-feedback URL. The frequency of the polling and how to
 determine which domains to poll is outside the scope of this
-document. However, the selection MUST NOT be influenced by potential HTTPS
-clients connecting directly to the auditor, as it would reveal private
-information provided by the clients.
+document. However, the selection MUST NOT be influenced by potential
+HTTPS clients connecting directly to the auditor, as it would reveal
+private information provided by the clients.
 
 ### SCT Feedback data format {#feedback-dataformat}
 
@@ -351,15 +351,14 @@ privacy-preserving manner.
 HTTPS servers supporting the protocol act as STH pools. HTTPS clients
 and others in the possesion of STHs should pollinate STH pools by
 sending STHs to them, and retrieving new STHs to send to new servers.
-CT auditors and monitors should retrieve STHs from pools by downloading
-STHs from them.
+CT auditors and monitors should retrieve STHs from pools by
+downloading STHs from them.
 
 STH Pollination is carried out by sending STHs to HTTPS servers
-supporting the protocol, and retrieving new STHs. In the case of
-HTTPS clients, STHs are sent
-in an already established TLS session. This makes it hard for an
-attacker to disrupt STH gossiping without also disturbing ordinary
-secure browsing (https://).
+supporting the protocol, and retrieving new STHs. In the case of HTTPS
+clients, STHs are sent in an already established TLS session. This
+makes it hard for an attacker to disrupt STH gossiping without also
+disturbing ordinary secure browsing (https://).
 
 STHs are sent by POSTing them at the .well-known URL:
 
@@ -389,15 +388,14 @@ of the system to ensure an STH will not be rare.
   hour.
 - HTTPS clients silently ignore STHs which are not fresh.
 
-An STH is considered fresh iff its timestamp is less than 14 days in the
-past. Given a maximum STH issuance rate of one per hour, an attacker
-has 336 unique STHs per log for tracking.
+An STH is considered fresh iff its timestamp is less than 14 days in
+the past. Given a maximum STH issuance rate of one per hour, an
+attacker has 336 unique STHs per log for tracking.
 
-When multiplied by the
-number of logs that a client accepts STHs for, this number of unique
-STHs grow and the negative privacy implications grow with it. It's
-important that this is taken into account when logs are chosen for
-default settings in HTTPS clients.
+When multiplied by the number of logs that a client accepts STHs for,
+this number of unique STHs grow and the negative privacy implications
+grow with it. It's important that this is taken into account when logs
+are chosen for default settings in HTTPS clients.
 
 \[TBD urge HTTPS clients to store STHs retrieved in responses?\]
 
@@ -405,30 +403,30 @@ default settings in HTTPS clients.
 
 ### HTTPS client STH Fetching
 
-An HTTPS client retrieves SCTs from an HTTPS server, and must obtain an inclusion
-proof to an STH in order to verify the promise made by the SCT. This retrieval mechanism reveals the
-client's browsing habits when the client requests the proof diretly from the log. To
-mitigate this risk, an HTTPS client MUST retrieve the proof in a manner that
+An HTTPS client retrieves SCTs from an HTTPS server, and must obtain
+an inclusion proof to an STH in order to verify the promise made by
+the SCT. This retrieval mechanism reveals the client's browsing habits
+when the client requests the proof diretly from the log. To mitigate
+this risk, an HTTPS client MUST retrieve the proof in a manner that
 disguises the client from the log.
 
 Additionally, for this inclusion proof to be acceptable to the client,
 the inclusion proof MUST reference a STH that is within the acceptable
 freshness interval.
 
-Depending on the client's DNS provider, DNS may provide an
-appropriate intermediate layer that obfuscates the linkability between
-the user of the client and the request for inclusion
-(while at the same time providing a caching layer for oft-requested
-inclusion proofs.)
+Depending on the client's DNS provider, DNS may provide an appropriate
+intermediate layer that obfuscates the linkability between the user of
+the client and the request for inclusion (while at the same time
+providing a caching layer for oft-requested inclusion proofs.)
 
 Also Tor.
 
 ### Auditor and Monitor Action
 
-Auditors and Monitors participate in STH pollination by retrieving STHs
-from HTTPS servers. They verify that the STH is valid by checking the
-signature, and requesting a consistency proof from the STH to the most
-recent STH.
+Auditors and Monitors participate in STH pollination by retrieving
+STHs from HTTPS servers. They verify that the STH is valid by checking
+the signature, and requesting a consistency proof from the STH to the
+most recent STH.
 
 After retrieving the consistency proof to the most recent STH, they
 SHOULD pollinate this new STH among participating HTTPS Servers. In
@@ -490,11 +488,11 @@ today is the relation between internet users and their providers of
 DNS resolver services. DNS resolvers are typically provided by the
 internet service provider (ISP) used, which by the nature of name
 resolving already know a great deal about what sites their users
-visit. As mentioned in Section XXX, in order for HTTPS clients to
-be able to retrieve inclusion proofs for certificates in a privacy preserving
-manner, logs could expose a DNS interface in addition to the ordinary
-HTTPS interface. An informal writeup of such a protocol can be found at
-XXX.
+visit. As mentioned in Section XXX, in order for HTTPS clients to be
+able to retrieve inclusion proofs for certificates in a privacy
+preserving manner, logs could expose a DNS interface in addition to
+the ordinary HTTPS interface. An informal writeup of such a protocol
+can be found at XXX.
 
 
 ### Trusted Auditor data format
@@ -522,10 +520,10 @@ itself; and to a trusted CT auditor, if one exists.
 
 ### Privacy in SCT Feedback {#privacy-feedback}
 
-SCTs introduce yet another mechanism for HTTPS servers to store state on
-an HTTPS client, and potentially track users. HTTPS clients which allow
-users to clear history or cookies associated with an origin MUST clear
-stored SCTs associated with the origin as well.
+SCTs introduce yet another mechanism for HTTPS servers to store state
+on an HTTPS client, and potentially track users. HTTPS clients which
+allow users to clear history or cookies associated with an origin MUST
+clear stored SCTs associated with the origin as well.
 
 Auditors should treat all SCTs as sensitive data. SCTs received
 directly from an HTTPS client are especially sensitive, because the
@@ -639,9 +637,9 @@ taking on this role needs to consider the following:
 - an effective Auditor needs a strategy about what to do in the event
   that it discovers misbehavior from a log. Misbehavior from a log
   involves the log being unable to provide either (a) a consistency
-  proof between two valid STHs or (b) an inclusion proof for a certificate
-  to an STH any time after the log's MMD has elapsed from the
-  issuance of the SCT. The log's inability to provide either proof
+  proof between two valid STHs or (b) an inclusion proof for a
+  certificate to an STH any time after the log's MMD has elapsed from
+  the issuance of the SCT. The log's inability to provide either proof
   will not be externally cryptographically-verifiable, as it may be
   indistinguishable from a network error.
 
