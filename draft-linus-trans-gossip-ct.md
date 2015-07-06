@@ -659,7 +659,11 @@ Seo, Magnus Ahltorp, Yan Zhu.
 
 ## Changes between -01 and -02
 
-- Add STH Pollination and Trusted Auditor Relationship.
+- STH Pollination defined.
+- Trusted Auditor Relationship defined.
+- Overview section rewritten.
+- Data flow picture added.
+- Section on privacy considerations expanded.
 
 ## Changes between -00 and -01
 
