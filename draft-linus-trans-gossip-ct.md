@@ -639,8 +639,8 @@ taking on this role needs to consider the following:
 - an effective Auditor needs a strategy about what to do in the event
   that it discovers misbehavior from a log. Misbehavior from a log
   involves the log being unable to provide either (a) a consistency
-  proof between two valid STHs or (b) an inclusion proof between an
-  SCT and an STH any time after the log's MMD has elapsed from the
+  proof between two valid STHs or (b) an inclusion proof for a certificate
+  to an STH any time after the log's MMD has elapsed from the
   issuance of the SCT. The log's inability to provide either proof
   will not be externally cryptographically-verifiable, as it may be
   indistinguishable from a network error.
