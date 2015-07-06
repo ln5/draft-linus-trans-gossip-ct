@@ -64,27 +64,27 @@ policy is agreed on between client and trusted party.
 # Introduction
 
 The purpose of the protocols in this document is to detect misbehavior
-by CT logs.  In particular, CT logs can misbehave either by rewriting
+by CT logs. In particular, CT logs can misbehave either by rewriting
 history or by presenting a "split view" of their operations, also
-known as a partitioning attack {{THREAT-ANALYSIS}}.  CT provides
+known as a partitioning attack {{THREAT-ANALYSIS}}. CT provides
 mechanisms for detection of these misbehaviors, but only if the
-community dependent on the log knows what to do with them.  In order
+community dependent on the log knows what to do with them. In order
 for the community to effectively detect log misbehavior, it needs a
 well-defined way to "gossip" about the activity of the logs that makes
 use of the available mechanisms.
 
 One of the major challenges of any gossip protocol is limiting damage
-to user privacy.  The goal of CT gossip is to publish and distribute
+to user privacy. The goal of CT gossip is to publish and distribute
 information about the logs and their operations, but not to leak any
 additional information about the operation of any of the other
-particpants.  Privacy of consumers of log information (in particular,
+particpants. Privacy of consumers of log information (in particular,
 of web browsers and other TLS clients) should not be damaged by
 gossip.
 
 This document presents three different, complementary mechanisms for
 non-log players in the CT ecosystem to exchange information about logs
 in a manner that preserves the privacy of the non-log players
-involved.  They should provide protective benefits for the system as a
+involved. They should provide protective benefits for the system as a
 whole even if their adoption is not universal.
 
 # Overview
@@ -108,7 +108,7 @@ sides, to see the other side.
 Disseminating known information about a log poses a potential threat
 to the privacy of end users. Some data of interest (e.g. SCTs) are
 linkable to specific log entries and thereby to specific sites, which
-makes them privacy-sensitive.  Gossip about this data has to take
+makes them privacy-sensitive. Gossip about this data has to take
 privacy considerations into account in order not to leak associations
 between users of the log (e.g., web browsers) and certificate holders
 (e.g., web sites). Even sharing STHs (which do not link to specific
