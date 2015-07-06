@@ -234,7 +234,9 @@ were not received from that server.
 Note that the SCT store also contains SCTs received in certificates.
 
 The client MUST NOT send the same set of SCTs to the same server more
-often than TBD. \[ explain why: is this just rate/resource limiting? \]
+often than TBD.
+\[benl: "sent to the server" only really counts if the server presented a valid SCT in the handshake and the certificate is known to be unrevoked (which will be hard for a MitM to sustain)\]
+\[TODO: expand on rate/resource limiting motivation\]
 
 An SCT MUST NOT be sent to any other HTTPS server than one serving the
 domain that the certificate signed by the SCT refers to. This would
