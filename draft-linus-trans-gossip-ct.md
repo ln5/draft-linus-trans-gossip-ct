@@ -226,10 +226,10 @@ log and SHOULD store the remaining SCTs together with the
 corresponding certificate chain for later use in feedback.
 
 When the client later reconnects to any HTTPS server for the same
-domain it again receives a set of SCTs. The client MUST add the new
-SCTs to its store of SCTs for the server and MUST send to the server
-the ones in the store that are for that server and were not received
-from that server.
+domain it again receives a set of SCTs. The client MUST add new SCTs
+from known logs to its store of SCTs for the server. The client MUST
+send to the server the ones in the store that are for that server and
+were not received from that server.
 
 Note that the SCT store also contains SCTs received in certificates.
 
