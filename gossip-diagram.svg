@@ -25,10 +25,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.59700021"
-     inkscape:cx="257.03674"
+     inkscape:cx="453.85409"
      inkscape:cy="465.18483"
      inkscape:document-units="px"
-     inkscape:current-layer="svg2"
+     inkscape:current-layer="l-Master"
      showgrid="false"
      units="px"
      inkscape:window-width="1366"
@@ -872,7 +872,7 @@
      inkscape:groupmode="layer"
      id="l-Gossip"
      inkscape:label="Gossip"
-     style="display:none"
+     style="display:inline"
      transform="translate(-36.195157,-25.845431)">
     <text
        xml:space="preserve"
@@ -974,7 +974,7 @@
     </g>
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="SCT Feedback"
      id="l-SCT Feedback"
      inkscape:groupmode="layer"
@@ -1081,7 +1081,7 @@
      inkscape:groupmode="layer"
      id="l-STH Pollination"
      inkscape:label="STH Pollination"
-     style="display:none"
+     style="display:inline"
      transform="translate(-36.195157,-25.845431)">
     <g
        style="display:inline"
@@ -1220,7 +1220,7 @@
      inkscape:groupmode="layer"
      id="l-Trusted Auditor"
      inkscape:label="Trusted Auditor"
-     style="display:none"
+     style="display:inline"
      transform="translate(-36.195157,-25.845431)">
     <g
        transform="translate(0,132)"
