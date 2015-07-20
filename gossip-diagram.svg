@@ -10,9 +10,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1400"
-   height="900"
-   viewBox="0 0 1400 900"
+   width="1289.6973"
+   height="914.703"
+   viewBox="0 0 1289.6973 914.70301"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -24,18 +24,22 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.61111111"
-     inkscape:cx="755.90416"
-     inkscape:cy="450"
+     inkscape:zoom="0.59700021"
+     inkscape:cx="668.25938"
+     inkscape:cy="465.18483"
      inkscape:document-units="px"
-     inkscape:current-layer="layer7"
+     inkscape:current-layer="layer8"
      showgrid="false"
      units="px"
      inkscape:window-width="1366"
      inkscape:window-height="767"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     fit-margin-top="10"
+     fit-margin-left="10"
+     fit-margin-right="10"
+     fit-margin-bottom="10" />
   <defs
      id="defs4">
     <marker
@@ -374,7 +378,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -383,8 +387,9 @@
      inkscape:label="Master"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-152.36216)"
-     style="display:inline">
+     transform="translate(-36.195157,-178.20759)"
+     style="display:inline"
+     sodipodi:insensitive="true">
     <g
        id="g11791">
       <g
@@ -547,25 +552,6 @@
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker8565)" />
       <text
          sodipodi:linespacing="125%"
-         id="text8693"
-         y="613.84357"
-         x="879.67511"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           y="613.84357"
-           x="879.67511"
-           id="tspan8695"
-           sodipodi:role="line">HTTPS</tspan><tspan
-           id="tspan8697"
-           y="638.84357"
-           x="879.67511"
-           sodipodi:role="line">Traffic</tspan><tspan
-           y="663.84357"
-           x="879.67511"
-           sodipodi:role="line"
-           id="tspan5444" /></text>
-      <text
-         sodipodi:linespacing="125%"
          id="text8699"
          y="441.4769"
          x="498.01089"
@@ -717,13 +703,13 @@
            cy="445.2193"
            cx="512"
            id="ellipse3460"
-           style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+           style="opacity:1;fill:#808080;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
         <text
            sodipodi:linespacing="125%"
            id="text3462"
            y="457.91107"
            x="509.47479"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:72.19709015px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:72.19709015px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            xml:space="preserve"><tspan
              y="457.91107"
              x="509.47479"
@@ -804,45 +790,195 @@
            id="tspan3488"
            x="668.20221"
            y="74.767143">cert chain + SCT</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text8693-4"
+         y="1026.1476"
+         x="-488.37595"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"
+         transform="matrix(0.24120335,-0.9704746,0.9704746,0.24120335,0,0)"><tspan
+           y="1026.1476"
+           x="-488.37595"
+           sodipodi:role="line"
+           id="tspan5444-6">SCTs</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text8693"
+         y="620.38904"
+         x="889.49329"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="620.38904"
+           x="889.49329"
+           id="tspan8695"
+           sodipodi:role="line">HTTPS</tspan><tspan
+           id="tspan8697"
+           y="645.38904"
+           x="889.49329"
+           sodipodi:role="line">Traffic</tspan><tspan
+           y="670.38904"
+           x="889.49329"
+           sodipodi:role="line"
+           id="tspan5444" /></text>
     </g>
     <text
-       transform="translate(0,284.36216)"
        sodipodi:linespacing="125%"
        id="text12989"
-       y="704.133"
-       x="244.3454"
+       y="1004.8588"
+       x="225.25449"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:53.68073273px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
-         y="704.133"
-         x="244.3454"
+         y="1004.8588"
+         x="225.25449"
          id="tspan12991"
-         sodipodi:role="line">Certificate Transparency</tspan></text>
+         sodipodi:role="line">Certificate Transparency</tspan><tspan
+         y="1071.9597"
+         x="225.25449"
+         sodipodi:role="line"
+         id="tspan4816">(detect CA misbehavior)</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="attack"
+     style="display:none"
+     transform="translate(-36.195157,-25.845431)">
+    <g
+       transform="translate(0,-152.36216)"
+       style="display:inline"
+       id="g4619">
+      <path
+         sodipodi:nodetypes="cccsssc"
+         inkscape:connector-curvature="0"
+         d="M 883.63636,574.54398 1143.8182,361.81671 M 872.32322,568.67525 c 15.65827,4.24758 23.95002,13.41506 20.26745,22.40799 -3.68256,8.99293 -18.43419,15.60068 -36.05727,16.15128 -17.62309,0.5506 -33.78556,-5.09132 -39.50578,-13.79048 -5.72022,-8.69916 0.40794,-18.31715 14.979,-23.50918"
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4610" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text4615"
+         y="346.60672"
+         x="1031.6937"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:73.22875214px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O Bold'"
+           y="346.60672"
+           x="1031.6937"
+           id="tspan4617"
+           sodipodi:role="line">Attack</tspan></text>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="Gossip"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:none"
+     transform="translate(-36.195157,-25.845431)">
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:119.13554382px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="983.20868"
-       y="286.46075"
+       x="970.1178"
+       y="122.82439"
        id="text5313"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5315"
-         x="983.20868"
-         y="286.46075">Gossip</tspan></text>
+         x="970.1178"
+         y="122.82439">Gossip</tspan></text>
+    <g
+       style="display:inline"
+       id="g4784"
+       transform="translate(-278.38252,-157.95779)">
+      <ellipse
+         ry="87.14286"
+         rx="104.28571"
+         cy="445.2193"
+         cx="512"
+         id="ellipse4786"
+         style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text4788"
+         y="457.91107"
+         x="509.47479"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:72.19709015px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="457.91107"
+           x="509.47479"
+           id="tspan4790"
+           sodipodi:role="line">Log</tspan></text>
+    </g>
+    <g
+       style="display:inline"
+       id="g4796"
+       transform="translate(-278.38252,-157.95779)">
+      <ellipse
+         ry="87.14286"
+         rx="104.28571"
+         cy="445.2193"
+         cx="512"
+         id="ellipse4798"
+         style="opacity:1;fill:#808080;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text4800"
+         y="457.91107"
+         x="509.47479"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:72.19709015px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="457.91107"
+           x="509.47479"
+           id="tspan4802"
+           sodipodi:role="line">Log</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:47.30133438px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="1012.7982"
+       y="199.32764"
+       id="text4808"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4810"
+         x="1012.7982"
+         y="199.32764">detect Log</tspan><tspan
+         sodipodi:role="line"
+         x="1012.7982"
+         y="258.45432"
+         id="tspan4812">misbehavior</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 988.36364,144 250.36366,0"
+       id="path4814"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g4983">
+      <ellipse
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="ellipse4822"
+         cx="485.42075"
+         cy="124.98829"
+         rx="104.28571"
+         ry="87.14286" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:72.19709015px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="482.89554"
+         y="137.68007"
+         id="text4824"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4826"
+           x="482.89554"
+           y="137.68007">CA</tspan></text>
+    </g>
   </g>
   <g
-     style="display:inline"
+     style="display:none"
      inkscape:label="SCT Feedback"
      id="layer2"
      inkscape:groupmode="layer"
-     transform="translate(0,132)"
-     sodipodi:insensitive="true">
+     transform="translate(-36.195157,106.15457)">
     <g
        id="g4971">
       <path
@@ -918,7 +1054,7 @@
     </g>
     <g
        id="g5439"
-       transform="translate(3.1035156,164.12117)">
+       transform="translate(3.1035156,164.12113)">
       <rect
          ry="11.422872"
          rx="11.483199"
@@ -945,8 +1081,8 @@
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="STH Pollination"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:none"
+     transform="translate(-36.195157,-25.845431)">
     <g
        style="display:inline"
        transform="matrix(-0.24410681,-0.96974835,0.96974835,-0.24410681,338.08538,859.3556)"
@@ -1003,7 +1139,7 @@
     </g>
     <g
        id="g5434"
-       transform="translate(3.1035156,159.68397)">
+       transform="translate(3.1035156,197.68394)">
       <rect
          style="display:inline;opacity:1;fill:#00ffff;fill-opacity:1;stroke:#00ffff;stroke-width:5.19999981;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.54651166"
          id="rect5304-6"
@@ -1084,8 +1220,8 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="Trusted Auditor"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:none"
+     transform="translate(-36.195157,-25.845431)">
     <g
        transform="translate(0,132)"
        style="display:inline"
@@ -1122,7 +1258,7 @@
     </g>
     <g
        id="g5429"
-       transform="translate(0,164.12121)">
+       transform="translate(0,240.1212)">
       <rect
          ry="11.422872"
          rx="11.483199"
