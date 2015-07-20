@@ -25,10 +25,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.61111111"
-     inkscape:cx="711.45455"
+     inkscape:cx="755.90416"
      inkscape:cy="450"
      inkscape:document-units="px"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer7"
      showgrid="false"
      units="px"
      inkscape:window-width="1366"
@@ -159,22 +159,6 @@
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
          id="path11037" />
-    </marker>
-    <marker
-       inkscape:isstock="true"
-       style="overflow:visible"
-       id="marker10917"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="Arrow1Lend"
-       inkscape:collect="always">
-      <path
-         transform="matrix(-0.8,0,0,-0.8,-10,0)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
-         id="path10919"
-         inkscape:connector-curvature="0" />
     </marker>
     <marker
        inkscape:stockid="Arrow1Lend"
@@ -390,7 +374,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -838,20 +822,19 @@
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="Gossip"
-     sodipodi:insensitive="true"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <text
-       transform="translate(0,-152.36216)"
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:119.13554382px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="983.20868"
-       y="274.70169"
+       y="286.46075"
        id="text5313"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5315"
          x="983.20868"
-         y="274.70169">Gossip</tspan></text>
+         y="286.46075">Gossip</tspan></text>
   </g>
   <g
      style="display:inline"
@@ -935,7 +918,7 @@
     </g>
     <g
        id="g5439"
-       transform="translate(3.1035156,-5.3405762e-5)">
+       transform="translate(3.1035156,164.12117)">
       <rect
          ry="11.422872"
          rx="11.483199"
@@ -962,7 +945,8 @@
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="STH Pollination"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <g
        style="display:inline"
        transform="matrix(-0.24410681,-0.96974835,0.96974835,-0.24410681,338.08538,859.3556)"
@@ -1019,7 +1003,7 @@
     </g>
     <g
        id="g5434"
-       transform="translate(3.1035156,-4.4372497)">
+       transform="translate(3.1035156,159.68397)">
       <rect
          style="display:inline;opacity:1;fill:#00ffff;fill-opacity:1;stroke:#00ffff;stroke-width:5.19999981;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.54651166"
          id="rect5304-6"
@@ -1041,12 +1025,67 @@
            id="tspan5321-3"
            sodipodi:role="line">• STH Pollination</tspan></text>
     </g>
+    <g
+       id="g3505"
+       transform="matrix(0.63118382,-0.77563328,0.77563328,0.63118382,31.635567,253.41697)"
+       style="display:inline">
+      <rect
+         ry="9.7923498"
+         rx="9.7923498"
+         y="550.91949"
+         x="285.16586"
+         height="27.978149"
+         width="57.547798"
+         id="rect3507"
+         style="display:inline;opacity:1;fill:#00ffff;fill-opacity:1;stroke:#00ffff;stroke-width:5.19999981;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.54651166"
+         transform="matrix(0.99960896,0.02796286,-0.02796286,0.99960896,0,0)" />
+      <text
+         transform="matrix(0.99959552,-0.02843926,0.02843926,0.99959552,0,0)"
+         sodipodi:linespacing="125%"
+         id="text3509"
+         y="589.47162"
+         x="261.85864"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="589.47162"
+           x="261.85864"
+           id="tspan3511"
+           sodipodi:role="line">STHs</tspan></text>
+    </g>
+    <g
+       style="display:inline"
+       transform="matrix(-0.6031563,0.79762301,-0.79762301,-0.6031563,1363.7919,531.82743)"
+       id="g3513">
+      <rect
+         transform="matrix(0.99960896,0.02796286,-0.02796286,0.99960896,0,0)"
+         style="display:inline;opacity:1;fill:#00ffff;fill-opacity:1;stroke:#00ffff;stroke-width:5.19999981;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.54651166"
+         id="rect3515"
+         width="57.547798"
+         height="27.978149"
+         x="285.16586"
+         y="550.91949"
+         rx="9.7923498"
+         ry="9.7923498" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="261.85864"
+         y="589.47162"
+         id="text3517"
+         sodipodi:linespacing="125%"
+         transform="matrix(0.99959552,-0.02843926,0.02843926,0.99959552,0,0)"><tspan
+           sodipodi:role="line"
+           id="tspan3519"
+           x="261.85864"
+           y="589.47162">STHs</tspan></text>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="Trusted Auditor"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <g
        transform="translate(0,132)"
        style="display:inline"
@@ -1083,7 +1122,7 @@
     </g>
     <g
        id="g5429"
-       transform="translate(0,-1.1444092e-5)">
+       transform="translate(0,164.12121)">
       <rect
          ry="11.422872"
          rx="11.483199"
@@ -1105,49 +1144,6 @@
            x="964.61212"
            id="tspan5321-3-9"
            sodipodi:role="line">• Trusted Auditor</tspan></text>
-    </g>
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="Auditor STH"
-     style="display:inline">
-    <g
-       transform="translate(0,132)"
-       style="display:inline"
-       id="g5262">
-      <g
-         transform="matrix(0.70830685,-0.70590467,0.70590467,0.70830685,-323.47764,381.84701)"
-         id="g4387">
-        <rect
-           transform="matrix(0.99960896,0.02796286,-0.02796286,0.99960896,0,0)"
-           style="display:inline;opacity:1;fill:#00ffff;fill-opacity:1;stroke:#00ffff;stroke-width:5.19999981;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.54651166"
-           id="rect4366-7"
-           width="57.547798"
-           height="27.978149"
-           x="285.16586"
-           y="550.91949"
-           rx="9.7923498"
-           ry="9.7923498" />
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:'Linux Biolinum O';-inkscape-font-specification:'Linux Biolinum O';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           x="264.32666"
-           y="588.08997"
-           id="text14350"
-           sodipodi:linespacing="125%"
-           transform="matrix(0.99959552,-0.02843926,0.02843926,0.99959552,0,0)"><tspan
-             sodipodi:role="line"
-             id="tspan14352"
-             x="264.32666"
-             y="588.08997">STH</tspan></text>
-      </g>
-      <path
-         sodipodi:nodetypes="ccc"
-         inkscape:connector-curvature="0"
-         id="path13322"
-         d="m 328.74317,569.35519 c -52.96122,21.33727 -84.86857,86.82146 -13.98907,78.3388 18.2734,-4.23052 46.16393,-27.97814 46.16393,-27.97814"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker10917)" />
     </g>
   </g>
   <script
