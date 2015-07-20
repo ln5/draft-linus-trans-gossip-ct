@@ -231,6 +231,10 @@ from known logs to its store of SCTs for the server. The client MUST
 send to the server the ones in the store that are for that server and
 were not received from that server.
 
+[ TODO: fix the above paragraph -- it is vague and confusing.  maybe
+  an example including a client caching at most one SCT per host+log
+  would clarify ]
+
 Note that the SCT store also contains SCTs received in certificates.
 
 The client MUST NOT send the same set of SCTs to the same server more
