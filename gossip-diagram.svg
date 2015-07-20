@@ -25,10 +25,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.59700021"
-     inkscape:cx="668.25938"
+     inkscape:cx="257.03674"
      inkscape:cy="465.18483"
      inkscape:document-units="px"
-     inkscape:current-layer="layer8"
+     inkscape:current-layer="svg2"
      showgrid="false"
      units="px"
      inkscape:window-width="1366"
@@ -386,7 +386,7 @@
      ns1:masterSlide="masterSlide"
      inkscape:label="Master"
      inkscape:groupmode="layer"
-     id="layer1"
+     id="l-Master"
      transform="translate(-36.195157,-178.20759)"
      style="display:inline"
      sodipodi:insensitive="true">
@@ -840,8 +840,8 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="attack"
+     id="l-Attack"
+     inkscape:label="Attack"
      style="display:none"
      transform="translate(-36.195157,-25.845431)">
     <g
@@ -870,7 +870,7 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer8"
+     id="l-Gossip"
      inkscape:label="Gossip"
      style="display:none"
      transform="translate(-36.195157,-25.845431)">
@@ -976,7 +976,7 @@
   <g
      style="display:none"
      inkscape:label="SCT Feedback"
-     id="layer2"
+     id="l-SCT Feedback"
      inkscape:groupmode="layer"
      transform="translate(-36.195157,106.15457)">
     <g
@@ -1079,7 +1079,7 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer7"
+     id="l-STH Pollination"
      inkscape:label="STH Pollination"
      style="display:none"
      transform="translate(-36.195157,-25.845431)">
@@ -1218,7 +1218,7 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer4"
+     id="l-Trusted Auditor"
      inkscape:label="Trusted Auditor"
      style="display:none"
      transform="translate(-36.195157,-25.845431)">
