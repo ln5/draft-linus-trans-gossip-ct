@@ -253,6 +253,7 @@ by its clients.
 If the HTTPS client has configuration options for not sending cookies
 to third parties, SCTs MUST be treated as cookies with respect to this
 setting.
+\[TODO: expand on why -- local storage cleanup; more?\]
 
 SCTs and corresponding certificates are POSTed to the originating
 HTTPS server at the well-known URL:
