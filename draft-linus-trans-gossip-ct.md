@@ -142,7 +142,7 @@ show what goes in the Trusted Auditor Relationship stream.
    +- Cert ---- +----------+
    |            |    CA    | ----------+
    |   + SCT -> +----------+           |
-   v   |                          Cert & SCT
+   v   |                           Cert [& SCT]
 +----------+                           |
 |   Log    | ---------- SCT -----------+
 +----------+                           v
