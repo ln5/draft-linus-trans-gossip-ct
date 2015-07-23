@@ -244,9 +244,9 @@ often than TBD.
 
 An SCT MUST NOT be sent to any other HTTPS server than one serving the
 domain that the certificate signed by the SCT refers to. This would
-lead to two types of privacy leaks. First, the server recieving the
+lead to two types of privacy leaks. First, the server receiving the
 SCT would learn about other sites visited by the HTTPS
-client. Secondly, auditors or monitors recieving SCTs from the HTTPS
+client. Secondly, auditors or monitors receiving SCTs from the HTTPS
 server would learn information about the other HTTPS servers visited
 by its clients.
 
@@ -284,7 +284,7 @@ Check number 2 is to prevent spamming attacks where an adversary
 can fill up the store prior to attacking a client, or a denial of
 service attack on the server's storage space.
 
-Check number 3 is to help malfunctioning clients from leaking what
+Check number 3 is to help malfunctioning clients from leaking which
 sites they visit and additionally to prevent spamming attacks.
 
 Note that an HTTPS server MAY perform a certificate chain validation
@@ -350,7 +350,7 @@ full chain to a known root.
 ## STH pollination
 
 The goal of sharing Signed Tree Heads (STHs) through pollination is to
-share STHs between HTTPS clients and CT auditors and monitors in a
+share STHs between HTTPS clients, CT auditors, and monitors in a
 privacy-preserving manner.
 
 HTTPS servers supporting the protocol act as STH pools. HTTPS clients
@@ -365,7 +365,7 @@ clients, STHs are sent in an already established TLS session. This
 makes it hard for an attacker to disrupt STH gossiping without also
 disturbing ordinary secure browsing (https://).
 
-STHs are sent by POSTing them at the .well-known URL:
+STHs are sent by POSTing them to the .well-known URL:
 
     https://<domain>/.well-known/ct/v1/sth-pollination
 
@@ -380,7 +380,7 @@ An HTTPS client may acquire STHs by several methods:
 - asking its supported logs for the current STH directly or indirectly;
 - via some other (currently unspecified) mechanism.
 
-HTTPS clients (who have STHs), CT auditors and monitors SHOULD
+HTTPS clients (who have STHs), CT auditors, and monitors SHOULD
 pollinate STH pools with STHs. Which STHs to send and how often
 pollination should happen is regarded as policy and out of scope for
 this document with exception of certain privacy concerns.
@@ -406,7 +406,7 @@ are chosen for default settings in HTTPS clients.
 
 \[TBD share inclusion proofs and consistency proofs too?\]
 
-### HTTPS client STH Fetching
+### HTTPS client STH and Inclusion Proof Fetching
 
 An HTTPS client retrieves SCTs from an HTTPS server, and must obtain
 an inclusion proof to an STH in order to verify the promise made by
@@ -471,13 +471,13 @@ servers is a JSON object {{RFC7159}} with the following content:
 ## Trusted Auditor Stream
 
 HTTPS clients MAY send SCTs and cert chains, as well as STHs, directly
-to auditors. Note that there are privacy implications of doing so,
-outlined in {{privacy-SCT}} and {{privacy-trusted-auditors}}.
+to auditors. Note that there are privacy implications in doing so,
+these are outlined in {{privacy-SCT}} and {{privacy-trusted-auditors}}.
 
 The most natural trusted auditor arrangement arguably is a web browser
 that is "logged in to" a provider of various internet
 services. Another equivalent arrangement is a trusted party like a
-corporation which an employer is connected to through a VPN or by
+corporation to which an employee is connected through a VPN or by
 other similar means. A third might be individuals or smaller groups of
 people running their own services. In such a setting, retrieving STHs
 and inclusion proofs from that third party in order to validate SCTs
@@ -492,7 +492,7 @@ Another well established trusted party arrangement on the internet
 today is the relation between internet users and their providers of
 DNS resolver services. DNS resolvers are typically provided by the
 internet service provider (ISP) used, which by the nature of name
-resolving already know a great deal about what sites their users
+resolving already know a great deal about which sites their users
 visit. As mentioned in Section XXX, in order for HTTPS clients to be
 able to retrieve inclusion proofs for certificates in a privacy
 preserving manner, logs could expose a DNS interface in addition to
@@ -559,7 +559,8 @@ described above. \[XXX any mitigations possible here?\]
 
 An HTTPS client that does not act as an auditor should only request an
 STH from a CT log that it accepts SCTs from. An HTTPS client should
-regularly request an STH from all logs it is willing to accept, even
+regularly [XXX how regularly? This has operational implications for log
+operators] request an STH from all logs it is willing to accept, even
 if it has seen no SCTs from that log.
 
 ### Privacy in STH Pollination
@@ -592,10 +593,10 @@ mitigated by the following factors:
 
 - an HTTPS client's relationship to a log is not sensitive in the way
   that its relationship to an HTTPS server is. As long as the client
-  does not query the log for more than individual STHs, the client
-  should not leak anything else to the log itself. However, a log and
-  an HTTPS server which are collaborating could use this technique to
-  fingerprint a targeted HTTPS client.
+  does not query the log for anything other than individual STHs, the
+  client should not leak anything else to the log itself. However, a
+  log and an HTTPS server which are collaborating could use this
+  technique to fingerprint a targeted HTTPS client.
 
 Note that an HTTPS client in the configuration described in this
 document doesn't make direct use of the STH itself. Its fetching of
