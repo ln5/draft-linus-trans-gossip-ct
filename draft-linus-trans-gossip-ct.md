@@ -344,7 +344,7 @@ with the following content:
     representation of the binary SCT data as defined in {{RFC6962}}
     Section 3.2.
 
-The 'x509_chain' element MUST contain at the leaf certificate and the
+The 'x509_chain' element MUST contain the leaf certificate and the
 full chain to a known root.
 
 ## STH pollination
