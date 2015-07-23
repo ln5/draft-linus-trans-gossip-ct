@@ -472,7 +472,7 @@ these are outlined in {{privacy-SCT}} and {{privacy-trusted-auditors}}.
 The most natural trusted auditor arrangement arguably is a web browser
 that is "logged in to" a provider of various internet
 services. Another equivalent arrangement is a trusted party like a
-corporation to which an employer [XXX employee?] is connected through a VPN or by
+corporation to which an employee is connected through a VPN or by
 other similar means. A third might be individuals or smaller groups of
 people running their own services. In such a setting, retrieving STHs
 and inclusion proofs from that third party in order to validate SCTs
@@ -590,7 +590,7 @@ mitigated by the following factors:
   that its relationship to an HTTPS server is. As long as the client
   does not query the log for anything other than individual STHs, the
   client should not leak anything else to the log itself. However, a
-  log and an HTTPS server which are collaborating could use this 
+  log and an HTTPS server which are collaborating could use this
   technique to fingerprint a targeted HTTPS client.
 
 Note that an HTTPS client in the configuration described in this
